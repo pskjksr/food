@@ -1,0 +1,90 @@
+.profile-container {
+  padding: 20px;
+  max-width: 600px;
+  margin: auto;
+  font-family: Arial, sans-serif;
+}
+
+.profile-title {
+  display: flex;
+  align-items: center;
+  font-size: 24px;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+.title-highlight {
+  width: 10px;
+  height: 10px;
+  background-color: orange;
+  border-radius: 50%;
+  margin-right: 10px;
+}
+
+.profile-card {
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
+  padding: 20px;
+}
+
+.profile-image {
+  position: relative;
+  margin-right: 50px;
+}
+
+.profile-image img {
+  width: 310px;
+  height: 250px;
+  border-radius: 10px;
+  object-fit: cover;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.edit-button {
+  position: absolute;
+  top: 10px;
+  left: 10px;
+  background: black;
+  color: white;
+  border: none;
+  border-radius: 50%;
+  padding: 10px;
+  cursor: pointer;
+}
+
+.edit-button i {
+  font-size: 16px;
+}
+
+.profile-info p {
+  margin: 10px  ;
+  font-size: 16px;
+}
+
+.profile-actions {
+  margin-top: 20px;
+}
+
+.graph-button,
+.favorite-button {
+  border: 1px solid EFBD4C(0, 0, 0);
+  color: orange;
+  border: none;
+  padding: 10px 15px;
+  margin: 5px;
+  border-radius: 5px;
+  cursor: pointer;
+  box-shadow: 0 0px 2px orange;
+}
+
+.graph-button:hover,
+.favorite-button:hover {
+  background: white;
+  color: orange;
+  border: 1px solid orange;
+}
+
+.favorite-button i {
+  margin-right: 5px;
+}
