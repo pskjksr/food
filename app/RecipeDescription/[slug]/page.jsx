@@ -31,6 +31,7 @@ const DetailPage = ({ params }) => {
             {item.ingredients.map((ingredient, index) => (
               <li key={index}>{ingredient}</li>
             ))}
+            <i className="fa-solid fa-heart border-2 text-sm border-[#FFECC1] bg-[#EFBD4C] text-[#fbfbfb] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-full p-1.5"></i>
           </ul>
         </div>
 
@@ -80,8 +81,7 @@ const DetailPage = ({ params }) => {
           {ingredients.map((ingredient, index) => (
             <span
               key={index}
-              className="bg-gray-200 px-4 py-2 rounded-full text-sm"
-            >
+              className="bg-gray-200 px-4 py-2 rounded-full text-sm">
               {ingredient}
             </span>
           ))}
