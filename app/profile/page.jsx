@@ -34,7 +34,9 @@ function Profile() {
           <div className="profile-actions">
             <button className="graph-button">Recipe visits graph</button>
             <button className="favorite-button">
-              <i className="fas fa-heart"></i>
+            <a href="/Like" style={{ textDecoration: "none", color: "inherit" }}>
+            <i className="fas fa-heart"></i>
+            </a>
             </button>
           </div>
         </div>
