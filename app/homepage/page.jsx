@@ -38,18 +38,21 @@ function page() {
         <h1 className="section-title">
           RECIPE <span className="add-icon">+</span>
         </h1>
-        <div className="recipe-category">
-          <h2>Japanese Cruisene</h2>
-          <JapaneseRecipes />
+        <div className="recipe-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+          <h2>Japanese Cuisine</h2>
+          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
         </div>
+        <JapaneseRecipes />
       </section>
 
       <section className="recipe-section">
-        <div className="recipe-category">
-          <h2>Thai Cruisene</h2>
-          <ThaiRecipes />
-        </div>
+       <div className="recipe-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+       <h2>Thai Cuisine</h2>
+        <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+      </div>
+      <ThaiRecipes />
       </section>
+
 
       <section className="recipe-section">
         <div className="recipe-category">
