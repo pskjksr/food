@@ -47,33 +47,38 @@ function page() {
 
       <section className="recipe-section">
        <div className="recipe-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
-       <h2>Thai Cuisine</h2>
-        <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
-      </div>
-      <ThaiRecipes />
+          <h2>Thai Cuisine</h2>
+          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+        </div>
+        <ThaiRecipes />
       </section>
 
 
       <section className="recipe-section">
-        <div className="recipe-category">
+       <div className="recipe-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h2>Chinese Cuisine</h2>
-          <ChineseRecipes />
-        </div>
+          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+       </div>
+       <ChineseRecipes />
       </section>
 
       <section className="recipe-section">
-        <div className="recipe-category">
+       <div className="recipe-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
           <h2>Western Cuisine</h2>
-          <WesternRecipes />
-        </div>
+          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+       </div>
+       <WesternRecipes />
       </section>
 
+
       <section className="recipe-section">
-        <div className="recipe-category">
-          <h2>Clean Eating Cuisine</h2>
-          <CleanEatingRecipes />
-        </div>
+       <div className="recipe-category" style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between' }}>
+         <h2>Clean Eating Cuisine</h2>
+         <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+       </div>
+       <CleanEatingRecipes />
       </section>
+
 
     </div>
   );
