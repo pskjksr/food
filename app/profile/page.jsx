@@ -1,5 +1,6 @@
 import React from 'react';
 import './Profile.css';
+import Link from 'next/link';
 
 function Profile() {
   return (
@@ -34,9 +35,9 @@ function Profile() {
           <div className="profile-actions">
             <button className="graph-button">Recipe visits graph</button>
             <button className="favorite-button">
-            <a href="/Like" style={{ textDecoration: "none", color: "inherit" }}>
+            <Link href="/Like" style={{ textDecoration: "none", color: "inherit" }}>
             <i className="fas fa-heart"></i>
-            </a>
+            </Link>
             </button>
           </div>
         </div>
