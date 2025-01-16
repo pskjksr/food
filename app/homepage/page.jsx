@@ -34,7 +34,7 @@ function page() {
         </div>
       </section>
 
-      <section className="recipe-section">
+      <section id="recipe-section" className="recipe-section">
         <h1 className="section-title">
           RECIPE <span className="add-icon">+</span>
         </h1>

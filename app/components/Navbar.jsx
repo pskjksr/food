@@ -1,8 +1,15 @@
-import React from 'react'
+"use client"
+import React from 'react';
 import Link from 'next/link';
-import Home from '../page';
 
 function Navbar() {
+  const scrollToSection = () => {
+    const section = document.getElementById('recipe-section');
+    if (section) {
+      section.scrollIntoView({ behavior: 'smooth' });
+    }
+  };
+
   return (
     <div>
       <header>
@@ -13,7 +20,9 @@ function Navbar() {
               <a href="/homepage">HOME</a>
             </li>
             <li>
-              <a href="#">RECIPE</a>
+              <a className='cursor-pointer' onClick={scrollToSection} >
+                RECIPE
+              </a>
             </li>
             <li>
               <Link href="/Categories">CATEGORIES</Link>
@@ -36,4 +45,4 @@ function Navbar() {
   );
 }
 
-export default Navbar
+export default Navbar;
