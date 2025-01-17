@@ -123,7 +123,8 @@ header nav a {
     padding: 40px 20px;
     position: relative; /* ใช้สำหรับจัดการตำแหน่งครึ่งวงกลม */
     background-color: #ffffff; /* สีพื้นหลัง */
-    overflow: hidden; /* ซ่อนส่วนที่เกิน */
+    z-index: -1;
+
 }
 
 .highlight::before {
@@ -134,8 +135,8 @@ header nav a {
     width: 700px; /* ความกว้างของครึ่งวงกลม */
     height: 1000px; /* ความสูงของครึ่งวงกลม */
     background-color: #ffd44f; /* สีเหลือง */
-    border-radius: 50%; /* สร้างวงกลม */
-    z-index: 0; /* ทำให้วงกลมอยู่ด้านหลัง */
+    border-radius: 0 9999px 9999px 0;
+    /* ทำให้วงกลมอยู่ด้านหลัง */
 }
 
 .highlight-content {
@@ -143,7 +144,8 @@ header nav a {
     align-items: center;
     gap: 20px;
     position: relative; /* เพื่อให้เนื้อหาอยู่ด้านบนครึ่งวงกลม */
-    z-index: 1;
+    
+    
 }
 
 .highlight img {
