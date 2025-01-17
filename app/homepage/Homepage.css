@@ -1,119 +1,118 @@
 * {
-    margin: 0;
-    padding: 0;
-    box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
 body {
-    font-family: Arial, sans-serif;
-    background-color: #f9f9f9;
-    color: #333;
+  font-family: Arial, sans-serif;
+  background-color: #f9f9f9;
+  color: #333;
 }
 
 header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 15px 30px;
-    background-color: #ffffff;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 15px 30px;
+  background-color: #ffffff;
 }
 
 header .logo {
-    font-size: 24px;
-    font-weight: bold;
+  font-size: 24px;
+  font-weight: bold;
 }
 
 header nav ul {
-    display: flex;
-    gap: 20px;
-    list-style: none;
+  display: flex;
+  gap: 20px;
+  list-style: none;
 }
 
 header nav a {
-    text-decoration: none;
-    color: #333;
-    font-weight: bold;
+  text-decoration: none;
+  color: #333;
+  font-weight: bold;
 }
 
 .header-search {
-    display: flex;
-    align-items: center;
+  display: flex;
+  align-items: center;
 }
 
 .header-search input {
-    border: none;
-    outline: none;
-    padding: 5px;
-    flex: 1;
+  border: none;
+  outline: none;
+  padding: 5px;
+  flex: 1;
 }
 
 .header-search .icon {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #eab543;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eab543;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
 }
 
-
 .search-bar {
-    display: flex;
-    align-items: center;
-    gap: 10px; /* ระยะห่างระหว่างไอคอน */
-    border: 2px solid #ffd44f; /* เปลี่ยนกรอบเป็นสีเหลือง */
-    border-radius: 20px; /* กรอบโค้งมน */
-    padding: 5px 10px;
-    background-color: #fff; /* พื้นหลังสีขาว */
-    width: 100%; /* ช่องพิมพ์ยืดเต็มพื้นที่ */
+  display: flex;
+  align-items: center;
+  gap: 10px; /* ระยะห่างระหว่างไอคอน */
+  border: 2px solid #ffd44f; /* เปลี่ยนกรอบเป็นสีเหลือง */
+  border-radius: 20px; /* กรอบโค้งมน */
+  padding: 5px 10px;
+  background-color: #fff; /* พื้นหลังสีขาว */
+  width: 100%; /* ช่องพิมพ์ยืดเต็มพื้นที่ */
 }
 
 .search-bar input {
-    flex: 1; /* ให้ช่องพิมพ์ขยายเต็มพื้นที่ */
-    border: none;
-    outline: none;
-    padding: 5px;
-    font-size: 14px;
+  flex: 1; /* ให้ช่องพิมพ์ขยายเต็มพื้นที่ */
+  border: none;
+  outline: none;
+  padding: 5px;
+  font-size: 14px;
 }
 
 .search-bar .icon {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #eab543;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eab543;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
 }
 
 .icon {
-    width: 30px;
-    height: 30px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    background-color: #eab543;
-    border-radius: 50%;
-    color: white;
-    cursor: pointer;
+  width: 30px;
+  height: 30px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  background-color: #eab543;
+  border-radius: 50%;
+  color: white;
+  cursor: pointer;
 }
 
 .user-icon {
-    margin-left: 10px; /* เพิ่มระยะห่างระหว่างไอคอนรูปคนกับไอคอนค้นหา */
-    background-color: #eab543; /* สีพื้นหลังเหมือนกัน */
+  margin-left: 10px; /* เพิ่มระยะห่างระหว่างไอคอนรูปคนกับไอคอนค้นหา */
+  background-color: #eab543; /* สีพื้นหลังเหมือนกัน */
 }
 
 .search-bar .icon:hover {
-    background-color: #ffc107; /* สีเปลี่ยนเมื่อโฮเวอร์ */
+  background-color: #ffc107; /* สีเปลี่ยนเมื่อโฮเวอร์ */
 }
 
 .icon-person {
-    margin-left: 10px;
+  margin-left: 10px;
 }
 
 .highlight {
@@ -144,175 +143,220 @@ header nav a {
     align-items: center;
     gap: 20px;
     position: relative; /* เพื่อให้เนื้อหาอยู่ด้านบนครึ่งวงกลม */
-    
-    
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 40px 20px;
+  position: relative; /* ใช้สำหรับจัดการตำแหน่งครึ่งวงกลม */
+  background-color: #ffffff; /* สีพื้นหลัง */
+  overflow: hidden; /* ซ่อนส่วนที่เกิน */
+}
+
+.highlight::before {
+  content: "";
+  position: absolute;
+  top: -150px; /* เลื่อนครึ่งวงกลมขึ้นไปด้านบน */
+  left: -150px; /* เลื่อนครึ่งวงกลมไปทางซ้าย */
+  width: 700px; /* ความกว้างของครึ่งวงกลม */
+  height: 1000px; /* ความสูงของครึ่งวงกลม */
+  background-color: #ffd44f; /* สีเหลือง */
+  border-radius: 50%; /* สร้างวงกลม */
+  z-index: 0; /* ทำให้วงกลมอยู่ด้านหลัง */
+}
+
+.highlight-content {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  position: relative; /* เพื่อให้เนื้อหาอยู่ด้านบนครึ่งวงกลม */
+  z-index: 1;
 }
 
 .highlight img {
-    width: 500px;
-    border-radius: 10px;
+  width: 500px;
+  border-radius: 10px;
 }
 
 .highlight .info {
-    max-width: 400px;
+  max-width: 400px;
 }
 
 .highlight .info h1 {
-    font-size: 28px;
-    margin-bottom: 10px;
-    color: #333;
+  font-size: 28px;
+  margin-bottom: 10px;
+  color: #333;
 }
 
 .highlight .info p {
-    margin-bottom: 20px;
-    font-size: 16px;
-    color: #555;
+  margin-bottom: 20px;
+  font-size: 16px;
+  color: #555;
 }
 
 .highlight .info button {
-    padding: 10px 20px;
-    background-color: #ffd44f;
-    border: none;
-    border-radius: 5px;
-    cursor: pointer;
+  padding: 10px 20px;
+  background-color: #ffd44f;
+  border: none;
+  border-radius: 5px;
+  cursor: pointer;
 }
 
 .highlight .info button:hover {
-    background-color: #ffc107;
+  background-color: #ffc107;
 }
 
 /* Section Title */
 .section-title {
-    font-size: 24px;
-    font-weight: bold;
-    color: #333;
-    display: flex;
-    align-items: center;
-    gap: 10px;
-    align-content: center;
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  align-content: center;
 }
 
 .add-icon {
-    font-size: 18px;
-    color: #000000;
-    background-color: #ffc107;
-    display: flex;
-    align-items: center;
-    justify-content: center; /* เพื่อให้ไอคอนอยู่ตรงกลาง */
-    width: 30px; /* ความกว้าง */
-    height: 30px; /* ความสูง */
-    border-radius: 50%; /* ทำให้เป็นวงกลม */
-    cursor: pointer;
-  }
-  
+  font-size: 18px;
+  color: #000000;
+  background-color: #ffc107;
+  display: flex;
+  align-items: center;
+  justify-content: center; /* เพื่อให้ไอคอนอยู่ตรงกลาง */
+  width: 30px; /* ความกว้าง */
+  height: 30px; /* ความสูง */
+  border-radius: 50%; /* ทำให้เป็นวงกลม */
+  cursor: pointer;
+}
 
 /* Recipe Section */
 .recipe-section {
-    padding: 20px 40px;
-    background-color: #ffffff;
+  padding: 20px 40px;
+  background-color: #ffffff;
 }
 
 .recipe-category h2 {
-    font-size: 20px;
-    color: #555;
-    margin-bottom: 20px;
+  font-size: 20px;
+  color: #555;
+  margin-bottom: 20px;
 }
 
 /* Grid Layout */
 .recipe-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
-    gap: 20px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 20px;
 }
 
 /* Recipe Card */
 .recipe-card {
-    background: #F8F8F8;
-    border-radius: 8px;
-    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
-    overflow: hidden;
-    text-align: center;
-    transition: transform 0.3s, box-shadow 0.3s;
-    display: flex;
-    flex-direction: column;
+  background: #f8f8f8;
+  border-radius: 8px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+  overflow: hidden;
+  text-align: center;
+  transition: transform 0.3s, box-shadow 0.3s;
+  display: flex;
+  flex-direction: column;
 }
 
 .recipe-card:hover {
-    transform: translateY(-5px);
-    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
+  transform: translateY(-5px);
+  box-shadow: 0 6px 12px rgba(0, 0, 0, 0.15);
 }
 
 .recipe-card img {
-    height: 150px;
-    object-fit: cover;
+  height: 150px;
+  object-fit: cover;
 }
 
 .card-content {
-    padding: 15px;
-    position: relative; /* ใช้เพื่อให้จัดตำแหน่งปุ่ม */
+  padding: 15px;
+  position: relative; /* ใช้เพื่อให้จัดตำแหน่งปุ่ม */
 }
 
 .card-content h3 {
-    text-align: center; /* ชื่ออยู่ตรงกลาง */
-    margin-bottom: 15px; /* เพิ่มระยะห่างระหว่างชื่อกับปุ่ม */
+  text-align: center; /* ชื่ออยู่ตรงกลาง */
+  margin-bottom: 15px; /* เพิ่มระยะห่างระหว่างชื่อกับปุ่ม */
 }
 
 .card-content button {
-    position: absolute;
-    right: 15px; /* ย้ายปุ่มไปด้านขวา */
-    bottom: 1px; /* ระยะห่างจากด้านล่าง */
-    padding: 8px 15px;
-    background-color: #ffd44f;
-    border: none;
-    border-radius: 4px;
-    font-size: 14px;
-    color: #333;
-    cursor: pointer;
-    transition: background-color 0.3s;
+  position: absolute;
+  right: 15px; /* ย้ายปุ่มไปด้านขวา */
+  bottom: 1px; /* ระยะห่างจากด้านล่าง */
+  padding: 8px 15px;
+  background-color: #ffd44f;
+  border: none;
+  border-radius: 4px;
+  font-size: 14px;
+  color: #333;
+  cursor: pointer;
+  transition: background-color 0.3s;
 }
 
 .card-content button:hover {
-    background-color: #ffc107;
+  background-color: #ffc107;
 }
 
 .recipe-section {
-    position: relative; /* เพื่อวางปุ่มเลื่อนซ้าย-ขวา */
+  position: relative; /* เพื่อวางปุ่มเลื่อนซ้าย-ขวา */
 }
 
 .slider-arrow {
-    position: absolute;
-    top: 50%; /* ตรงกลางแนวตั้ง */
-    transform: translateY(-50%);
-    background-color: #ffd44f;
-    border: none;
-    border-radius: 50%;
-    width: 40px;
-    height: 40px;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    cursor: pointer;
-    transition: background-color 0.3s;
-    z-index: 2;
+  position: absolute;
+  top: 50%; /* ตรงกลางแนวตั้ง */
+  transform: translateY(-50%);
+  background-color: #ffd44f;
+  border: none;
+  border-radius: 50%;
+  width: 40px;
+  height: 40px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  cursor: pointer;
+  transition: background-color 0.3s;
+  z-index: 2;
 }
 
 .slider-arrow:hover {
-    background-color: #ffc107;
+  background-color: #ffc107;
 }
 
 .slider-arrow.left {
-    left: -20px; /* ด้านซ้าย */
+  left: -20px; /* ด้านซ้าย */
 }
 
 .slider-arrow.right {
-    right: -20px; /* ด้านขวา */
+  right: -20px; /* ด้านขวา */
 }
 
 .slider-arrow svg {
-    fill: #333; /* สีของไอคอน */
+  fill: #333; /* สีของไอคอน */
 }
 
+/* ปรับแต่งขนาด Badge */
+.badge {
+  font-size: 15px;
+  padding: 20px 4px;
+  text-align: center;
+  border-radius: 10px;
+  background-color: #f5f5f5;
+  color: #333;
+  transition: background-color 0.3s, color 0.3s;
+  width: 100%;
+  display: flex;
+}
 
+.badge:hover {
+  background-color: #efbd4c; /* สีเหลือง */
+  color: white;
+}
 
-
-
+/* ปรับแต่งปุ่ม OK */
+.btn {
+  border: none;
+  padding: 10px 30px;
+  border-radius: 20px;
+  font-size: 16px;
+}
