@@ -74,7 +74,7 @@ function page() {
   };
 
   return (
-    <div>
+    <>
       <section className="highlight">
         <div className="highlight-content">
           <img src="teokbokki.png" alt="Tteokbokki" />
@@ -207,7 +207,7 @@ function page() {
           </div>
         </div>
       )}
-    </div>
+    </>
   );
 }
 
