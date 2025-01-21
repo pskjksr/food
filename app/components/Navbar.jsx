@@ -13,7 +13,7 @@ function Navbar() {
 
   return (
     <div>
-      <header>
+      <header >
         <div className="logo">LOGO</div>
         <nav>
           <ul>

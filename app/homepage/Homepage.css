@@ -116,6 +116,33 @@ header nav a {
 }
 
 .highlight {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    padding: 40px 20px;
+    position: relative; /* ใช้สำหรับจัดการตำแหน่งครึ่งวงกลม */
+    background-color: #ffffff; /* สีพื้นหลัง */
+    z-index: -1;
+
+}
+
+.highlight::before {
+    content: '';
+    position: absolute;
+    top: -150px; /* เลื่อนครึ่งวงกลมขึ้นไปด้านบน */
+    left: -150px; /* เลื่อนครึ่งวงกลมไปทางซ้าย */
+    width: 700px; /* ความกว้างของครึ่งวงกลม */
+    height: 1000px; /* ความสูงของครึ่งวงกลม */
+    background-color: #ffd44f; /* สีเหลือง */
+    border-radius: 0 9999px 9999px 0;
+    /* ทำให้วงกลมอยู่ด้านหลัง */
+}
+
+.highlight-content {
+    display: flex;
+    align-items: center;
+    gap: 20px;
+    position: relative; /* เพื่อให้เนื้อหาอยู่ด้านบนครึ่งวงกลม */
   display: flex;
   align-items: center;
   justify-content: center;
