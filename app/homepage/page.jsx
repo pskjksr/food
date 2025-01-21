@@ -82,7 +82,7 @@ function Page() {
               it a favorite comfort food in Korea.
             </p>
             <Link href="/RecipeDescription/tteokbokki">
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-white py-2 px-6 rounded shadow">
+              <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 py-2 px-6 rounded shadow">
                 RECIPE
               </button>
             </Link>
