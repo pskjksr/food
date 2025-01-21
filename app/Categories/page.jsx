@@ -1,6 +1,7 @@
 import React from "react";
 import data from "../data";
 import Link from "next/link";
+import "../homepage/Homepage.css";
 
 export default function Breakfast() {
   const Breakfast = data.filter((item) => item.category === "Breakfast");

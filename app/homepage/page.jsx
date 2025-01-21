@@ -56,22 +56,22 @@ function page() {
     setSelectedIngredients((prevSelected) => {
       // ตรวจสอบว่ารายการถูกอัปเดตตามที่คาดหวังหรือไม่
       console.log("ก่อนการอัปเดต: ", prevSelected);
-      
+
       // ถ้า ingredient อยู่ในรายการที่เลือกไว้ ให้ลบออก
       if (prevSelected.includes(ingredient)) {
-        const updatedIngredients = prevSelected.filter((item) => item !== ingredient);
+        const updatedIngredients = prevSelected.filter(
+          (item) => item !== ingredient
+        );
         console.log("รายการหลังการลบ: ", updatedIngredients);
         return updatedIngredients;
       }
-      
+
       // ถ้า ingredient ไม่อยู่ในรายการที่เลือก ให้เพิ่มเข้าไป
       const updatedIngredients = [...prevSelected, ingredient];
       console.log("รายการหลังการเพิ่ม: ", updatedIngredients);
       return updatedIngredients;
     });
   };
-  
-  
 
   return (
     <div>
@@ -110,7 +110,9 @@ function page() {
           }}
         >
           <h2>Japanese Cuisine</h2>
-          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+          <Link href="/japaneseCuisine" className="flex items-center">
+            <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+          </Link>
         </div>
         <JapaneseRecipes />
       </section>
@@ -182,16 +184,16 @@ function page() {
             <div className="grid grid-cols-4 gap-2">
               {ingredients.map((ingredient, index) => (
                 <div
-                key={index}
-                className={`badge badge-outline text-center p-4 cursor-pointer ${
-                  selectedIngredients.includes(ingredient)
-                    ? "bg-yellow-400 text-white"
-                    : "bg-white text-black"
-                }`}
-                onClick={() => toggleIngredient(ingredient)}
-              >
-                {ingredient}
-              </div>
+                  key={index}
+                  className={`badge badge-outline text-center p-4 cursor-pointer ${
+                    selectedIngredients.includes(ingredient)
+                      ? "bg-yellow-400 text-white"
+                      : "bg-white text-black"
+                  }`}
+                  onClick={() => toggleIngredient(ingredient)}
+                >
+                  {ingredient}
+                </div>
               ))}
             </div>
             <div className="modal-action">
