@@ -1,6 +1,5 @@
 "use client";
 import React, { useState, useEffect } from "react";
-import "./Homepage.css";
 import Link from "next/link";
 import data from "../data.js";
 import ThaiRecipes from "../components/thaiRecipes";
@@ -9,7 +8,7 @@ import ChineseRecipes from "../components/ChineseRecipes";
 import WesternRecipes from "../components/WesternRecipes";
 import CleanEatingRecipes from "../components/CleanEatingRecipes";
 
-function page() {
+function Page() {
   const [randomRecipes, setRandomRecipes] = useState([]);
   const [showPopup, setShowPopup] = useState(false);
   const [selectedIngredients, setSelectedIngredients] = useState([]);
@@ -54,33 +53,28 @@ function page() {
 
   const toggleIngredient = (ingredient) => {
     setSelectedIngredients((prevSelected) => {
-      // ตรวจสอบว่ารายการถูกอัปเดตตามที่คาดหวังหรือไม่
-      console.log("ก่อนการอัปเดต: ", prevSelected);
-
-      // ถ้า ingredient อยู่ในรายการที่เลือกไว้ ให้ลบออก
       if (prevSelected.includes(ingredient)) {
-        const updatedIngredients = prevSelected.filter(
-          (item) => item !== ingredient
-        );
-        console.log("รายการหลังการลบ: ", updatedIngredients);
-        return updatedIngredients;
+        return prevSelected.filter((item) => item !== ingredient);
       }
-
-      // ถ้า ingredient ไม่อยู่ในรายการที่เลือก ให้เพิ่มเข้าไป
-      const updatedIngredients = [...prevSelected, ingredient];
-      console.log("รายการหลังการเพิ่ม: ", updatedIngredients);
-      return updatedIngredients;
+      return [...prevSelected, ingredient];
     });
   };
 
   return (
     <>
-      <section className="highlight">
-        <div className="highlight-content">
-          <img src="teokbokki.png" alt="Tteokbokki" />
-          <div className="info">
-            <h1>Tteokbokki : 떡볶이</h1>
-            <p>
+      <section className="flex flex-col items-center justify-center p-10 bg-white relative overflow-hidden">
+        <div className="absolute -left-1/3 w-[1000px] h-[1000px] bg-yellow-400 rounded-full " />
+        <div className="flex flex-col md:flex-row items-center gap-6 z-[1]">
+          <img
+            src="teokbokki.png"
+            alt="Tteokbokki"
+            className="w-full md:w-[500px] rounded-lg"
+          />
+          <div className="max-w-md text-center md:text-left">
+            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+              Tteokbokki : 떡볶이
+            </h1>
+            <p className="text-gray-600 mb-6">
               Tteokbokki is a popular Korean street food made from soft rice
               cakes, fish cakes, and a sweet and spicy sauce called gochujang.
               It’s often garnished with boiled eggs, scallions, or sesame seeds.
@@ -88,107 +82,79 @@ function page() {
               it a favorite comfort food in Korea.
             </p>
             <Link href="/RecipeDescription/tteokbokki">
-              <button className="recipe-button">RECIPE</button>
+              <button className="bg-yellow-400 hover:bg-yellow-500 text-white py-2 px-6 rounded shadow">
+                RECIPE
+              </button>
             </Link>
           </div>
         </div>
       </section>
 
-      <section id="recipe-section" className="recipe-section">
-        <h1 className="section-title">
-          RECIPE{" "}
-          <span className="add-icon" onClick={() => setShowPopup(true)}>
+      <section id="recipe-section" className="p-10 bg-white">
+        <h1 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+          RECIPE
+          <span
+            className="w-8 h-8 flex items-center justify-center bg-yellow-400 text-black rounded-full cursor-pointer"
+            onClick={() => setShowPopup(true)}
+          >
             +
           </span>
         </h1>
-        <div
-          className="recipe-category"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <h2>Japanese Cuisine</h2>
-          <Link href="/japaneseCuisine" className="flex items-center">
-            <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">
+            Japanese Cuisine
+          </h2>
+          <Link href="/japaneseCuisine">
+            <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
           </Link>
         </div>
         <JapaneseRecipes />
-      </section>
 
-      <section className="recipe-section">
-        <div
-          className="recipe-category"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <h2>Thai Cuisine</h2>
-          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">Thai Cuisine</h2>
+          <Link href="/japaneseCuisine">
+            <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
+          </Link>
         </div>
         <ThaiRecipes />
-      </section>
 
-      <section className="recipe-section">
-        <div
-          className="recipe-category"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <h2>Chinese Cuisine</h2>
-          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">Chinese Cuisine</h2>
+          <Link href="/japaneseCuisine">
+            <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
+          </Link>
         </div>
         <ChineseRecipes />
-      </section>
 
-      <section className="recipe-section">
-        <div
-          className="recipe-category"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <h2>Western Cuisine</h2>
-          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">Western Cuisine</h2>
+          <Link href="/japaneseCuisine">
+            <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
+          </Link>
         </div>
         <WesternRecipes />
-      </section>
 
-      <section className="recipe-section">
-        <div
-          className="recipe-category"
-          style={{
-            display: "flex",
-            alignItems: "center",
-            justifyContent: "space-between",
-          }}
-        >
-          <h2>Clean Eating Cuisine</h2>
-          <i className="fa-solid fa-chevron-right text-xl text-[#717171]"></i>
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">Clean Eating Cuisine</h2>
+          <Link href="/japaneseCuisine">
+            <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
+          </Link>
         </div>
         <CleanEatingRecipes />
       </section>
 
-      {/* Popup (Modal ของ DaisyUI) */}
       {showPopup && (
-        <div className="modal modal-open border border-black">
-          <div className="modal-box w-xl border border-black">
-            <div className="grid grid-cols-4 gap-2">
+        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50 z-[5]">
+          <div className="bg-white p-6 rounded-lg w-4/5 max-w-xl">
+            <div className="grid grid-cols-4 gap-4">
               {ingredients.map((ingredient, index) => (
                 <div
                   key={index}
-                  className={`badge badge-outline text-center p-4 cursor-pointer ${
+                  className={`p-2 rounded cursor-pointer text-center border border-gray-300 ${
                     selectedIngredients.includes(ingredient)
                       ? "bg-yellow-400 text-white"
-                      : "bg-white text-black"
+                      : "bg-white text-gray-800"
                   }`}
                   onClick={() => toggleIngredient(ingredient)}
                 >
@@ -196,9 +162,9 @@ function page() {
                 </div>
               ))}
             </div>
-            <div className="modal-action">
+            <div className="mt-4 text-right">
               <button
-                className="btn bg-[#EFBD4C] text-white hover:bg-[#EFBD4C]"
+                className="bg-yellow-400 text-white py-2 px-6 rounded shadow"
                 onClick={() => setShowPopup(false)}
               >
                 OK
@@ -211,4 +177,4 @@ function page() {
   );
 }
 
-export default page;
+export default Page;

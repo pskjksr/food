@@ -1,7 +1,7 @@
 "use client"
 import React from 'react';
 import Link from 'next/link';
-import "../homepage/Homepage.css";
+
 
 function Navbar() {
   const scrollToSection = () => {
@@ -12,36 +12,39 @@ function Navbar() {
   };
 
   return (
-    <div>
-      <header >
-        <div className="logo">LOGO</div>
-        <nav>
-          <ul>
-            <li>
-              <a href="/homepage">HOME</a>
-            </li>
-            <li>
-              <a className='cursor-pointer' onClick={scrollToSection} >
-                RECIPE
-              </a>
-            </li>
-            <li>
-              <Link href="/Categories">CATEGORIES</Link>
-            </li>
-          </ul>
-        </nav>
-        <div className="header-search">
-          <div className="search-bar">
-            <input type="text" />
-            <div className="icon search-icon">
-              <i className="fas fa-search"></i>
-            </div>
+    <div className="flex justify-between items-center font-semibold text-xl px-5 py-2">
+      <div>LOGO</div>
+      <nav className="ml-40">
+        <ul className="flex gap-5">
+          <li>
+            <a href="/homepage">HOME</a>
+          </li>
+          <li>
+            <a className="cursor-pointer" onClick={scrollToSection}>
+              RECIPE
+            </a>
+          </li>
+          <li>
+            <Link href="/Categories">CATEGORIES</Link>
+          </li>
+        </ul>
+      </nav>
+      <div className="flex items-center gap-6">
+        <div className="bg-yellow-500 flex rounded-full p-1">
+          <input
+            type="text"
+            className="bg-transparent rounded-full outline-yellow-500"
+          />
+          <div className="p-1">
+            <i className="fas fa-search text-white"></i>
           </div>
-          <Link href="/profile" className="icon user-icon">
-            <i className="fas fa-user"></i>
+        </div>
+        <div className="bg-yellow-500 rounded-full w-12 h-12 flex items-center text-center justify-center">
+          <Link href="/profile">
+            <i className="fas fa-user text-white"></i>
           </Link>
         </div>
-      </header>
+      </div>
     </div>
   );
 }

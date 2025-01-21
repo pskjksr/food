@@ -1,8 +1,8 @@
 "use client"
 import {useState,useEffect} from "react";
 import data from "../data.js";
-import "../homepage/Homepage.css";
 import JapaneseRecipes from "../components/japaneseRecipes.jsx";
+
 
 export default function page() {
   const [randomRecipes, setRandomRecipes] = useState([]);
@@ -16,17 +16,13 @@ export default function page() {
 
   return (
     <section id="recipe-section" className="recipe-section">
-      <div
-        className="recipe-category"
-        style={{
-          display: "flex",
-          alignItems: "center",
-          justifyContent: "space-between",
-        }}
-      >
-        <h2>Japanese Cuisine</h2>
-      </div>
-      <JapaneseRecipes />
+      <div className="mb-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700 ml-5">
+            Japanese Cuisine
+          </h2>
+        </div>
+        <div className="px-5"><JapaneseRecipes /></div>
+
     </section>
   );
 }

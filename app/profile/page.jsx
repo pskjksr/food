@@ -7,7 +7,7 @@ function Profile() {
       <h2 className="flex items-center text-2xl mb-6 text-gray-800">
         <span className="w-2.5 h-2.5 bg-yellow-400 rounded-full mr-2"></span> Profile
       </h2>
-      <div className="flex flex-row items-start p-6 rounded-lg">
+      <div className="flex flex-row items-start rounded-lg">
         <div className="relative mr-12">
           <img
             src="shin.jpg"
@@ -31,8 +31,8 @@ function Profile() {
           <p className="mb-2 text-gray-700">
             <strong>Address:</strong> <span className="block text-gray-500">285 N Broad St, Elizabeth, NJ 07208, USA</span>
           </p>
-          <div className="mt-4 flex items-center">
-            <button className="px-5 bg-white text-yellow-400 rounded-md shadow-md hover:bg-white hover:text-yellow-500 border border-yellow-400 transition">
+          <div className="mt-4 flex">
+            <button className="px-4 bg-white text-yellow-400 rounded-md shadow-md hover:bg-white hover:text-yellow-500 border border-yellow-400 transition">
               Recipe visits graph
             </button>
             <Link href="/Like" className="ml-4 px-4 py-2 bg-white text-yellow-500 rounded-md shadow-md hover:bg-white hover:text-yellow-400 border border-yellow-400 transition flex items-center">
