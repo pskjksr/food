@@ -1,3 +1,4 @@
+"use client"
 import React from "react";
 import data from "../data";
 import Link from "next/link";

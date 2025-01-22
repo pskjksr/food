@@ -113,33 +113,25 @@ function Page() {
 
         <div className="my-8 flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-700">Thai Cuisine</h2>
-          <Link href="/japaneseCuisine">
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
-          </Link>
         </div>
         <ThaiRecipes />
 
         <div className="my-8 flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-700">Chinese Cuisine</h2>
-          <Link href="/japaneseCuisine">
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
-          </Link>
         </div>
         <ChineseRecipes />
 
         <div className="my-8 flex justify-between items-center">
           <h2 className="text-lg font-semibold text-gray-700">Western Cuisine</h2>
-          <Link href="/japaneseCuisine">
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
-          </Link>
         </div>
         <WesternRecipes />
 
         <div className="my-8 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-700">Clean Eating Cuisine</h2>
-          <Link href="/japaneseCuisine">
+          <h2 className="text-lg font-semibold text-gray-700">Clean Eating Cuisine</h2>        
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
-          </Link>
         </div>
         <CleanEatingRecipes />
       </section>
@@ -151,10 +143,10 @@ function Page() {
               {ingredients.map((ingredient, index) => (
                 <div
                   key={index}
-                  className={`p-2 rounded cursor-pointer text-center border border-gray-300 ${
+                  className={`p-1 rounded-3xl cursor-pointer text-center border border-gray-200 ${
                     selectedIngredients.includes(ingredient)
                       ? "bg-yellow-400 text-white"
-                      : "bg-white text-gray-800"
+                      : "bg-gray-100 text-gray-700"
                   }`}
                   onClick={() => toggleIngredient(ingredient)}
                 >
@@ -164,7 +156,7 @@ function Page() {
             </div>
             <div className="mt-4 text-right">
               <button
-                className="bg-yellow-400 text-white py-2 px-6 rounded shadow"
+                className="bg-yellow-400 text-white py-2 px-6 rounded-3xl shadow"
                 onClick={() => setShowPopup(false)}
               >
                 OK
