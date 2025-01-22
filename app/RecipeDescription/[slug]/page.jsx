@@ -1,4 +1,3 @@
-
 import React from "react";
 import data from "../../data.js"; // ดึงข้อมูลจากไฟล์ data.js
 import Random from "@/app/components/random.jsx";
