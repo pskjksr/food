@@ -64,12 +64,6 @@ model RecipeIngredient {
   @@id([recipeId, ingredientId])
 }
 
-enum DifficultyLevel {
-  Easy
-  Medium
-  Hard
-}
-
 enum Role {
   ADMIN
   USER
