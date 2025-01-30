@@ -61,20 +61,21 @@ function Page() {
   };
 
   return (
+    
     <>
-      <section className="flex flex-col items-center justify-center p-10 bg-white relative overflow-hidden">
-        <div className="absolute -left-1/3 w-[1000px] h-[1000px] bg-yellow-400 rounded-full " />
-        <div className="flex flex-col md:flex-row items-center gap-6 z-[1]">
+      <section className="relative flex flex-col items-center justify-center p-10  ">
+        <div className="absolute -left-1/3 w-[1000px] h-[950px] bg-yellow-400 rounded-full z-[-1]" />
+        <div className="flex flex-col md:flex-row items-center gap-6 ">
           <img
             src="teokbokki.png"
             alt="Tteokbokki"
             className="w-full md:w-[500px] rounded-lg"
           />
           <div className="max-w-md text-center md:text-left">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">
+            <h1 className="text-[48px] font-bold text-gray-800 mb-4">
               Tteokbokki : 떡볶이
             </h1>
-            <p className="text-gray-600 mb-6">
+            <p className="text-gray-600 mb-6 text-[20px]">
               Tteokbokki is a popular Korean street food made from soft rice
               cakes, fish cakes, and a sweet and spicy sauce called gochujang.
               It’s often garnished with boiled eggs, scallions, or sesame seeds.
@@ -82,7 +83,7 @@ function Page() {
               it a favorite comfort food in Korea.
             </p>
             <Link href="/RecipeDescription/tteokbokki">
-              <button className="border-2 bg-yellow-400 text-gray-800 border-[#FFECC1] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] py-2 px-6 rounded-full shadow"> 
+              <button className="border-2 text-[25px] bg-yellow-400 text-gray-800 border-[#FFECC1] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] py-2 px-6 rounded-full shadow"> 
                 RECIPE
               </button>
             </Link>
@@ -90,11 +91,11 @@ function Page() {
         </div>
       </section>
 
-      <section id="recipe-section" className="p-10 bg-white">
-        <h1 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
+      <section id="recipe-section" className="p-10 mt-20">
+        <h1 className="text-[36px] font-bold text-gray-800 mb-4 flex items-center gap-2">
           RECIPE
           <span
-            className="w-8 h-8 flex items-center justify-center border-2 bg-yellow-400 text-gray-800 border-[#FFECC1] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-full cursor-pointer"
+            className="w-10 h-10 flex items-center justify-center border-2 bg-yellow-400 text-gray-800 border-[#FFECC1] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-full cursor-pointer"
             onClick={() => setShowPopup(true)}
           >
             +
@@ -102,7 +103,7 @@ function Page() {
         </h1>
 
         <div className="my-8 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-700">
+          <h2 className="text-[28px] font-semibold text-gray-700">
             Japanese Cuisine
           </h2>
           <Link href="/japaneseCuisine">
@@ -112,25 +113,25 @@ function Page() {
         <JapaneseRecipes />
 
         <div className="my-8 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-700">Thai Cuisine</h2>
+          <h2 className="text-[26px] font-semibold text-gray-700">Thai Cuisine</h2>
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
         </div>
         <ThaiRecipes />
 
         <div className="my-8 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-700">Chinese Cuisine</h2>
+          <h2 className="text-[26px] font-semibold text-gray-700">Chinese Cuisine</h2>
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
         </div>
         <ChineseRecipes />
 
         <div className="my-8 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-700">Western Cuisine</h2>
+          <h2 className="text-[26px] font-semibold text-gray-700">Western Cuisine</h2>
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
         </div>
         <WesternRecipes />
 
         <div className="my-8 flex justify-between items-center">
-          <h2 className="text-lg font-semibold text-gray-700">Clean Eating Cuisine</h2>        
+          <h2 className="text-[26px] font-semibold text-gray-700">Clean Eating Cuisine</h2>        
             <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i>
         </div>
         <CleanEatingRecipes />
