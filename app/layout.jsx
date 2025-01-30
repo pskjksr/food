@@ -21,12 +21,10 @@ export const metadata = {
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
-      <body
-        className={`${geistSans.variable} ${geistMono.variable} antialiased`}
-      >
-        <Navbar/>
-        {children}
+      <body className={`${geistSans.variable} ${geistMono.variable} antialiased`}>
+        <Navbar className="relative z-10" /> {/* Navbar อยู่ข้างหน้า */}
+        <div className="relative z-0">{children}</div> {/* เนื้อหาทั้งหมดอยู่ด้านหลัง */}
       </body>
     </html>
   );
-}
+} 
