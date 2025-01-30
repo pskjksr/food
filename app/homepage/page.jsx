@@ -82,7 +82,7 @@ function Page() {
               it a favorite comfort food in Korea.
             </p>
             <Link href="/RecipeDescription/tteokbokki">
-              <button className="bg-yellow-400 hover:bg-yellow-500 text-gray-800 py-2 px-6 rounded shadow">
+              <button className="border-2 bg-yellow-400 text-gray-800 border-[#FFECC1] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] py-2 px-6 rounded-full shadow"> 
                 RECIPE
               </button>
             </Link>
@@ -94,7 +94,7 @@ function Page() {
         <h1 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           RECIPE
           <span
-            className="w-8 h-8 flex items-center justify-center bg-yellow-400 text-black rounded-full cursor-pointer"
+            className="w-8 h-8 flex items-center justify-center border-2 bg-yellow-400 text-gray-800 border-[#FFECC1] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-full cursor-pointer"
             onClick={() => setShowPopup(true)}
           >
             +
