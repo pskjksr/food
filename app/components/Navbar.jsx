@@ -1,6 +1,7 @@
 "use client"
 import React, { useState } from 'react';
 import Link from 'next/link';
+import Image from 'next/image';
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
@@ -17,8 +18,8 @@ function Navbar() {
   };
 
   return (
-    <div className="flex justify-between items-center font-semibold text-xl px-5 py-2">
-      <div>LOGO</div>
+    <div className="flex justify-between items-center relative font-semibold text-xl px-5 py-2">
+      <div><Image src="/logo.png" width={50} height={50} alt="logo" /></div>
       <nav className="ml-40">
         <ul className="flex gap-5">
           <li>
@@ -38,7 +39,7 @@ function Navbar() {
         <div className="bg-yellow-500 flex rounded-full p-1">
           <input
             type="text"
-            className="bg-transparent rounded-full outline-yellow-500"
+            className="bg-transparent rounded-full px-4 outline-yellow-500"
           />
           <div className="p-1">
             <i className="fas fa-search text-white"></i>
@@ -46,7 +47,7 @@ function Navbar() {
         </div>
         <div className="relative">
           <div
-            className="bg-yellow-500 rounded-full w-12 h-12 flex items-center text-center justify-center cursor-pointer"
+            className="bg-yellow-500 rounded-full w-12 h-12  flex items-center text-center justify-center cursor-pointer"
             onClick={toggleDropdown}
           >
             <i className="fas fa-user text-white"></i>
