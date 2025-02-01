@@ -32,11 +32,11 @@ function Profile() {
             <strong>Address:</strong> <span className="block text-gray-500">285 N Broad St, Elizabeth, NJ 07208, USA</span>
           </p>
           <div className="mt-4 flex">
-            <Link href="/Recipevisitsgraph" className="px-4 bg-white text-yellow-400 rounded-md shadow-md hover:bg-white hover:text-yellow-500 border border-yellow-400 transition">
+            <Link href="/Recipevisitsgraph" className="px-4 bg-white border-[#EFBD4C] text-[#FFB100] hover:text-[#fbfbfb]  hover:bg-yellow-400 hover:border-[#FFECC1] active:bg-[#F8F8F8]  rounded-md shadow-md border  transition">
               Recipe visits graph
             </Link>
-            <Link href="/Like" className="ml-4 px-4 py-2 bg-white text-yellow-500 rounded-md shadow-md hover:bg-white hover:text-yellow-400 border border-yellow-400 transition flex items-center">
-              <i className="fas fa-heart"></i>
+            <Link href="/Like" className="ml-4 px-4 py-2  border-2 bg-white border-[#EFBD4C]  text-[#FFB100] rounded-md shadow-md  hover:text-[#fbfbfb]  hover:bg-yellow-400 hover:border-[#FFECC1] active:bg-[#F8F8F8]  transition flex items-center">
+              <i className="fas fa-heart"></i>        
             </Link>
           </div>
         </div>
