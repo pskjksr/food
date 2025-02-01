@@ -1,0 +1,97 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+
+model Cuisine {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  recipes    Recipe[]
+}
+
+model Category {
+  id         Int      @id @default(autoincrement())
+  name       String   @unique
+  recipes    Recipe[]
+}
+
+model User {
+  id       Int      @id @default(autoincrement())
+  email    String   @unique
+  password String
+  name     String?
+  role     Role     @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  recipes Recipe[]  // ความสัมพันธ์กับ Recipe
+  likes   Like[]    // ความสัมพันธ์กับ Like
+  views   View[]    // ความสัมพันธ์กับ View
+}
+
+model Recipe {
+  id              Int              @id @default(autoincrement())
+  name            String
+  description     String?
+  ingredientDetails String?
+  instructions    String?
+  cuisineId       Int
+  cuisine         Cuisine          @relation(fields: [cuisineId], references: [id])
+  ingredients     RecipeIngredient[]
+  image           String?           
+  categoryId      Int
+  category        Category         @relation(fields: [categoryId], references: [id])
+
+  User            User[]           // ความสัมพันธ์กับ User
+  likes           Like[]           // ความสัมพันธ์กับ Like
+  views           View[]           // ความสัมพันธ์กับ View
+}
+
+model Like {
+  id         Int      @id @default(autoincrement())
+  userId     Int      // รหัสผู้ใช้ที่กด "ถูกใจ"
+  recipeId   Int      // รหัสสูตรอาหารที่ถูกใจ
+  createdAt  DateTime @default(now())  // เวลาเมื่อกด "ถูกใจ"
+
+  user       User     @relation(fields: [userId], references: [id])  // เชื่อมโยงกับ User
+  recipe     Recipe   @relation(fields: [recipeId], references: [id]) // เชื่อมโยงกับ Recipe
+
+  @@unique([userId, recipeId])  // จำกัดไม่ให้กด "ถูกใจ" ซ้ำ
+}
+
+model View {
+  id         Int      @id @default(autoincrement())
+  userId     Int?     // รหัสผู้ใช้ที่เข้าชม (สามารถเป็น NULL ถ้าไม่ใช่ผู้ใช้ที่ล็อกอิน)
+  recipeId   Int      // รหัสสูตรอาหารที่เข้าชม
+  createdAt  DateTime @default(now())  // เวลาที่เข้าชม
+
+  user       User?    @relation(fields: [userId], references: [id])   // เชื่อมโยงกับ User (ถ้ามี)
+  recipe     Recipe   @relation(fields: [recipeId], references: [id]) // เชื่อมโยงกับ Recipe
+}
+
+
+model Ingredient {
+  id         Int              @id @default(autoincrement())
+  name       String           @unique
+  recipes    RecipeIngredient[]
+}
+
+model RecipeIngredient {
+  recipeId     Int
+  ingredientId Int
+  quantity     Float
+  recipe       Recipe    @relation(fields: [recipeId], references: [id])
+  ingredient   Ingredient @relation(fields: [ingredientId], references: [id])
+
+  @@id([recipeId, ingredientId])
+}
+
+enum Role {
+  ADMIN
+  USER
+}

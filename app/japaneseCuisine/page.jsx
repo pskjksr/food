@@ -1,7 +1,6 @@
 "use client"
 import {useState,useEffect} from "react";
-import data from "../data.js";
-import JapaneseRecipes from "../components/japaneseRecipes.jsx";
+import JapaneseRecipes from "../components/japaneseRecipes";
 
 
 export default function page() {
