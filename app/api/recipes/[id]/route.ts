@@ -1,44 +1,39 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../db/prisma"; // Make sure the path to Prisma is correct
+import prisma from "../../db/prisma"; // ตรวจสอบ path ให้ถูกต้อง
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
   try {
-    const { id } = params;
+    const recipeId = Number(context.params.id); // ✅ ใช้ context.params แทน
+    console.log("Received Recipe ID:", recipeId);
 
-    // Log to verify the received id
-    console.log("Received Recipe ID:", id);
-
-    // Ensure the id is a valid number
-    if (!id || isNaN(Number(id)) || Number(id) <= 0) {
-      console.error("Invalid Recipe ID received");
+    // Validate the recipe ID
+    if (isNaN(recipeId) || recipeId <= 0) {
       return NextResponse.json({ error: "Invalid Recipe ID" }, { status: 400 });
     }
 
-    const recipeId = Number(id);
-
-    // 🔍 Query the recipe using Prisma
+    // Retrieve the recipe from the database
     const recipe = await prisma.recipe.findUnique({
       where: { id: recipeId },
       include: {
-        category: true,  // If you're linking related tables, include them like this
-        cuisine: true, 
-        ingredients: true, 
+        category: true,
+        cuisine: true,
+        ingredients: true,
       },
     });
 
-    // Handle case if recipe not found
     if (!recipe) {
+      console.log("Recipe not found");
       return NextResponse.json({ message: "Recipe not found" }, { status: 404 });
     }
 
-    // Return the found recipe as JSON
+    console.log("Fetched Recipe Data:", recipe);
     return NextResponse.json(recipe);
 
   } catch (error: any) {
-    console.error("API Error:", error);  // Log the error for debugging
-    return NextResponse.json({ 
-      error: "Something went wrong", 
-      details: error.message,  // Provide error message for debugging
-    }, { status: 500 });
+    console.error("API error occurred:", error.message);
+    return NextResponse.json(
+      { error: "An error occurred", details: error.message },
+      { status: 500 }
+    );
   }
 }

@@ -21,18 +21,24 @@ model Category {
 }
 
 model User {
-  id       Int      @id @default(autoincrement())
-  email    String   @unique
-  password String
-  name     String?
-  role     Role     @default(USER)
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id          Int      @id @default(autoincrement()) // รหัสผู้ใช้
+  email       String   @unique // อีเมลของผู้ใช้
+  password    String   // รหัสผ่านของผู้ใช้
+  role        Role     @default(USER) // บทบาทของผู้ใช้
+  createdAt   DateTime @default(now()) // เวลาที่ผู้ใช้ถูกสร้าง
+  updatedAt   DateTime @updatedAt // เวลาที่ข้อมูลผู้ใช้ถูกอัปเดต
 
-  recipes Recipe[]  // ความสัมพันธ์กับ Recipe
-  likes   Like[]    // ความสัมพันธ์กับ Like
-  views   View[]    // ความสัมพันธ์กับ View
+  // ฟิลด์โปรไฟล์ที่เพิ่มเข้าไปใน User
+  name        String?  // ชื่อผู้ใช้
+  phone       String?  // เบอร์โทรศัพท์ผู้ใช้
+  address     String?  // ที่อยู่ผู้ใช้
+  profileImage String? // รูปโปรไฟล์ของผู้ใช้
+
+  recipes     Recipe[] // สูตรอาหารที่ผู้ใช้สร้าง
+  likes       Like[]   // ถูกใจสูตรอาหาร
+  views       View[]   // เข้าชมสูตรอาหาร
 }
+
 
 model Recipe {
   id              Int              @id @default(autoincrement())
