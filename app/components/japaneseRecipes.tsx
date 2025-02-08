@@ -9,7 +9,6 @@ interface Recipe {
   image?: string;
 }
 
-// ✅ ใช้ TypeScript และเพิ่มการตรวจสอบข้อมูล
 export default function CleanEatingRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
@@ -18,6 +17,7 @@ export default function CleanEatingRecipes() {
   // ✅ ใช้ ENV เพื่อกำหนด API URL
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+  // 🟢 UseEffect with fetch logic
   useEffect(() => {
     async function fetchRecipes() {
       try {

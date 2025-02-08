@@ -45,7 +45,7 @@ const RecipeDescription = () => {
     }
 
     fetchRecipe();
-  }, [id]);
+  }, [API_URL, id]);
 
   if (loading) return <div className="flex justify-center items-center"><span>Loading...</span></div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;

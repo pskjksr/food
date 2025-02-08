@@ -7,9 +7,8 @@ import Image from "next/image";
 // 🟢 สร้าง Type สำหรับ Recipe
 interface Recipe {
   id: number;
-  title: string;
-  slug: string;
   image: string;
+  name: string;  // ใช้ name แทน title
 }
 
 export default function RandomRecipes() {
@@ -57,19 +56,17 @@ export default function RandomRecipes() {
           <div className="flex justify-center p-2">
             <Image
               src={item.image ? `${API_URL}/${item.image}` : "/fallback-image.jpg"}
-              alt={item.title}
+              alt={item.name}  // ใช้ name แทน title
               width={150}
               height={150}
               className="object-cover rounded-md"
             />
           </div>
           <div className="relative p-4 text-center">
-            <h3 className="mb-4">{item.title}</h3>
-            <Link href={`/RecipeDescription/${item.slug}`}>
-              <button className="absolute right-4 bottom-1 px-4 py-2 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
-                RECIPE
-              </button>
-            </Link>
+            <h3 className="mb-4">{item.name}</h3>  {/* ใช้ name แทน title */}
+            <button className="absolute right-4 bottom-1 px-4 py-2 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
+              RECIPE
+            </button>
           </div>
         </div>
       ))}

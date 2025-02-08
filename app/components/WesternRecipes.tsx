@@ -1,4 +1,4 @@
-/* eslint-disable @next/next/no-img-element */
+"use client";
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
@@ -9,11 +9,11 @@ interface Recipe {
   image?: string;
 }
 
-// ✅ ใช้ TypeScript และเพิ่มการตรวจสอบข้อมูล
 export default function CleanEatingRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
+  const [favorites, setFavorites] = useState<number[]>([]); // สถานะการกดหัวใจ
 
   // ✅ ใช้ ENV เพื่อกำหนด API URL
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
@@ -25,8 +25,6 @@ export default function CleanEatingRecipes() {
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Recipe[] = await response.json();
-        console.log("Fetched Recipes:", result); // 🟢 Debug
-
         setRecipes(result);
       } catch (err) {
         if (err instanceof Error) {
@@ -41,6 +39,15 @@ export default function CleanEatingRecipes() {
 
     fetchRecipes();
   }, [API_URL]);
+
+  // ฟังก์ชันที่ใช้ในการเพิ่ม/ลบรายการจาก favorites
+  const toggleFavorite = (id: number) => {
+    setFavorites((prevFavorites) =>
+      prevFavorites.includes(id)
+        ? prevFavorites.filter((item) => item !== id) // ลบรายการ
+        : [...prevFavorites, id] // เพิ่มรายการ
+    );
+  };
 
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
@@ -82,12 +89,16 @@ export default function CleanEatingRecipes() {
             </div>
 
             {/* ปุ่มหัวใจ (Favorite) */}
-            <i className="fa-solid fa-heart absolute bottom-2 left-2 border-2 text-sm border-[#FFECC1] 
-                          bg-[#EFBD4C] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] 
-                          hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-full p-1.5 cursor-pointer"></i>
+            <i
+              className={`fa-solid fa-heart absolute bottom-2 left-2 border-2 text-sm p-1.5 cursor-pointer 
+                          ${favorites.includes(item.id) ? "text-red-500" : "text-gray-500"} 
+                          ${favorites.includes(item.id) ? "bg-yellow-300" : "bg-[#EFBD4C]"}`}
+              onClick={() => toggleFavorite(item.id)} // เมื่อคลิกจะเพิ่ม/ลบรายการจาก favorites
+            ></i>
           </div>
         ))}
       </div>
+
     </div>
   );
 }
