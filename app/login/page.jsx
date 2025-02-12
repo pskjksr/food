@@ -51,8 +51,8 @@ function LoginPage() {
 
   return (
     <>
-      <div className="relative w-screen h-screen flex">
-        <div className="absolute top-[-71px] left-0 w-1/3 h-[600px] z-0">
+      <div className="relative w-screen h-screen flex justify-center items-center">
+        <div className="absolute top-[-71px] left-0 w-1/3 h-full z-0">
           <Image
             src="/l.png"
             alt="Background image on the left"
@@ -62,7 +62,7 @@ function LoginPage() {
           />
         </div>
 
-        <div className="flex flex-col ml-96 mt-8 h-screen">
+        <div className="flex flex-col w-full max-w-lg p-5 z-10 mt-50">
           <h1 className="text-shadow-xl text-[40px] font-bold text-transparent bg-clip-text bg-gradient-to-r from-[#FFB100] to-[#FFE6AD]">
             Welcome Back!
           </h1>

@@ -1,7 +1,10 @@
 import { NextResponse } from "next/server";
-import prisma from "../db/prisma";
+import { PrismaClient } from "@prisma/client";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
+import { serialize } from "cookie";
+
+const prisma = new PrismaClient();
 
 export async function POST(req: Request) {
   try {
@@ -11,7 +14,7 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Email and password are required!" }, { status: 400 });
     }
 
-    // Find user by email
+    // ค้นหาผู้ใช้จากฐานข้อมูล
     const user = await prisma.user.findUnique({
       where: { email },
     });
@@ -20,18 +23,44 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "User not found!" }, { status: 404 });
     }
 
-    // Compare password
+    // ตรวจสอบรหัสผ่าน
     const passwordMatch = await bcrypt.compare(password, user.password);
     if (!passwordMatch) {
       return NextResponse.json({ error: "Invalid password!" }, { status: 401 });
     }
 
-    // Generate JWT Token
-    const token = jwt.sign({ userId: user.id, role: user.role }, process.env.JWT_SECRET!, {
-      expiresIn: "7d",
+    // ตรวจสอบ JWT_SECRET
+    if (!process.env.JWT_SECRET) {
+      console.error("JWT_SECRET is not defined in environment variables.");
+      return NextResponse.json({ error: "Server configuration error" }, { status: 500 });
+    }
+
+    // สร้าง JWT Token
+    const token = jwt.sign(
+      { userId: user.id, role: user.role },
+      process.env.JWT_SECRET,
+      { expiresIn: "7d" }
+    );
+
+    // ตั้งค่า Token ใน Cookie (httpOnly, secure)
+    const cookie = serialize("token", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV === "production",
+      sameSite: "strict",
+      path: "/",
+      maxAge: 7 * 24 * 60 * 60, // 7 วัน
     });
 
-    return NextResponse.json({ message: "Login successful!", token, user }, { status: 200 });
+    // ไม่ส่ง password กลับไป
+    const { password: _, ...userWithoutPassword } = user;
+
+    return new NextResponse(
+      JSON.stringify({ message: "Login successful!", user: userWithoutPassword }),
+      {
+        status: 200,
+        headers: { "Set-Cookie": cookie },
+      }
+    );
   } catch (error) {
     console.error("Login error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });

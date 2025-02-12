@@ -1,8 +1,9 @@
 "use client";
+
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
 
-// 🟢 กำหนด Type สำหรับ Recipe
+// กำหนด Type สำหรับ Recipe
 interface Recipe {
   id: number;
   name: string;
@@ -13,9 +14,8 @@ export default function CleanEatingRecipes() {
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [favorites, setFavorites] = useState<number[]>([]); // สถานะการกดหัวใจ
+  const [likedRecipes, setLikedRecipes] = useState<number[]>([]); // เก็บเมนูที่ถูก Like
 
-  // ✅ ใช้ ENV เพื่อกำหนด API URL
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
   useEffect(() => {
@@ -40,13 +40,43 @@ export default function CleanEatingRecipes() {
     fetchRecipes();
   }, [API_URL]);
 
-  // ฟังก์ชันที่ใช้ในการเพิ่ม/ลบรายการจาก favorites
-  const toggleFavorite = (id: number) => {
-    setFavorites((prevFavorites) =>
-      prevFavorites.includes(id)
-        ? prevFavorites.filter((item) => item !== id) // ลบรายการ
-        : [...prevFavorites, id] // เพิ่มรายการ
-    );
+  // ฟังก์ชัน Toggle กดไลก์ / ยกเลิกไลก์
+  const toggleLike = (recipeId: number) => {
+    // Optimistic UI: update likedRecipes ก่อนที่จะทำ request ไปที่ API
+    setLikedRecipes((prevLikedRecipes) => {
+      const isLiked = prevLikedRecipes.includes(recipeId);
+      const newLikedRecipes = isLiked
+        ? prevLikedRecipes.filter((id) => id !== recipeId) // เอาออกจากรายการไลก์
+        : [...prevLikedRecipes, recipeId]; // เพิ่มเข้าไปในรายการไลก์
+
+      // ส่งค่ากลับให้ UI ทำการ render ใหม่ทันที
+      return newLikedRecipes;
+    });
+
+    // ส่งคำขอ API เพื่ออัปเดตสถานะ Like
+    const isLiked = likedRecipes.includes(recipeId);
+    fetch(`${API_URL}/api/like`, {
+      method: isLiked ? "DELETE" : "POST", // เลือกวิธีการ (POST หรือ DELETE)
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ userId: 1, recipeId }), // ส่งข้อมูล userId และ recipeId
+    })
+      .then((response) => response.json())
+      .then((data) => {
+        console.log("Like status updated:", data);
+      })
+      .catch((err) => {
+        console.error("Failed to update like status:", err);
+
+        // ถ้าเกิดข้อผิดพลาดในการเรียก API ให้ยกเลิกการเปลี่ยนแปลง UI
+        setLikedRecipes((prevLikedRecipes) => {
+          const isLiked = prevLikedRecipes.includes(recipeId);
+          const newLikedRecipes = isLiked
+            ? prevLikedRecipes
+            : prevLikedRecipes.filter((id) => id !== recipeId);
+
+          return newLikedRecipes;
+        });
+      });
   };
 
   if (loading) return <div>Loading...</div>;
@@ -54,16 +84,16 @@ export default function CleanEatingRecipes() {
 
   return (
     <div className="p-4">
-      <div className="grid grid-cols-[repeat(auto-fit,_minmax(200px,_1fr))] gap-5">
-        {recipes.slice(0, 5).map((item) => (
+      <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4">
+        {recipes.slice(0, 6).map((item) => (
           <div
             key={item.id}
             className="bg-gray-100 rounded-lg shadow-md overflow-hidden text-center 
                       transition-transform duration-300 ease-in-out flex flex-col 
                       hover:shadow-lg hover:-translate-y-1 relative"
           >
-            {/* รูปภาพ */}
-            <div className="flex justify-center p-2">
+            {/* รูปภาพเมนู */}
+            <div className="flex justify-center p-3">
               <img
                 src={item.image ? `${API_URL}/${item.image}` : "/fallback-image.jpg"}
                 alt={item.name || "Recipe Image"}
@@ -72,33 +102,27 @@ export default function CleanEatingRecipes() {
               />
             </div>
 
-            {/* เนื้อหาภายในการ์ด */}
-            <div className="relative p-4 text-center">
-              <h3 className="mb-4 font-semibold text-lg">{item.name}</h3>
-              {item.id ? (
-                <Link href={`/RecipeDescription/${item.id}`}>
-                  <button className="absolute right-4 bottom-1 px-4 py-2 bg-yellow-400 
-                                      text-gray-800 text-sm rounded-md hover:bg-yellow-500 
-                                      transition-colors duration-300">
-                    RECIPE
-                  </button>
-                </Link>
-              ) : (
-                <p className="text-gray-500 text-sm">Recipe coming soon!</p>
-              )}
+            {/* ชื่อเมนู & ปุ่มดูสูตร */}
+            <div className="relative p-4 flex-grow">
+              <h3 className="mb-3 font-semibold text-lg">{item.name}</h3>
+              <Link href={`/RecipeDescription/${encodeURIComponent(item.name)}`}>
+                <button className="px-3 py-1.5 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
+                  RECIPE
+                </button>
+              </Link>
             </div>
 
-            {/* ปุ่มหัวใจ (Favorite) */}
+            {/* ปุ่มหัวใจ (Like) */}
             <i
-              className={`fa-solid fa-heart absolute bottom-2 left-2 border-2 text-sm p-1.5 cursor-pointer 
-                          ${favorites.includes(item.id) ? "text-red-500" : "text-gray-500"} 
-                          ${favorites.includes(item.id) ? "bg-yellow-300" : "bg-[#EFBD4C]"}`}
-              onClick={() => toggleFavorite(item.id)} // เมื่อคลิกจะเพิ่ม/ลบรายการจาก favorites
+              className={`fa-solid fa-heart absolute top-2 right-2 border-2 text-xs border-[#FFECC1] 
+                          ${likedRecipes.includes(item.id) ? "text-red-500 bg-yellow-300" : "text-slate-100 bg-[#EFBD4C]"} 
+                          hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] 
+                          active:bg-[#F8F8F8] rounded-full p-2 cursor-pointer`}
+              onClick={() => toggleLike(item.id)}
             ></i>
           </div>
         ))}
       </div>
-
     </div>
   );
 }

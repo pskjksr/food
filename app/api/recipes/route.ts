@@ -12,7 +12,10 @@ export async function GET(req: NextRequest) {
   const cuisineId = searchParams.get("cuisineId");
 
   // Validate categoryId and cuisineId
-  if ((categoryId && isNaN(Number(categoryId))) || (cuisineId && isNaN(Number(cuisineId)))) {
+  if (
+    (categoryId && isNaN(Number(categoryId))) ||
+    (cuisineId && isNaN(Number(cuisineId)))
+  ) {
     return NextResponse.json(
       { error: "Invalid or missing categoryId or cuisineId. Please provide valid numeric values." },
       { status: 400 }
@@ -43,12 +46,20 @@ export async function GET(req: NextRequest) {
 
     // Return the recipes if found
     return NextResponse.json(recipes);
-  } catch (error: any) {
-    // Log and return detailed error if any
-    console.error("Error fetching recipes:", error);
-    return NextResponse.json(
-      { error: "Internal server error. Please try again later.", details: error.message },
-      { status: 500 }
-    );
+  } catch (error: unknown) {
+    // Improved error handling with type check
+    if (error instanceof Error) {
+      console.error("Error fetching recipes:", error.message);
+      return NextResponse.json(
+        { error: "Internal server error. Please try again later.", details: error.message },
+        { status: 500 }
+      );
+    } else {
+      console.error("Unexpected error:", error);
+      return NextResponse.json(
+        { error: "An unexpected error occurred." },
+        { status: 500 }
+      );
+    }
   }
 }

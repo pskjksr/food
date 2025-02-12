@@ -1,60 +1,108 @@
 "use client";
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useCallback } from "react";
+import Link from "next/link";
 
-// Define the structure of the Like object
 interface Like {
   id: number;
   recipeId: number;
   recipeName: string;
-  // Add any other fields you may want to show
+  recipeImage?: string;
 }
 
-const LikePage = () => {
-  const [likes, setLikes] = useState<Like[]>([]); // Holds the list of liked recipes
-  const [loading, setLoading] = useState<boolean>(true); // Loading state
-  const [error, setError] = useState<string | null>(null); // Error state
+const API_URL = process.env.NEXT_PUBLIC_API_URL || ""; // Define API_URL
 
-  // Fetch liked recipes on page load
+const LikePage = () => {
+  const [likes, setLikes] = useState<Like[]>([]);
+  const [likedRecipes, setLikedRecipes] = useState<number[]>([]);
+  const [loading, setLoading] = useState<boolean>(true);
+  const [error, setError] = useState<string | null>(null);
+
   useEffect(() => {
     async function fetchLikes() {
+      const userId = 1; // Replace with actual userId from authentication
       try {
-        const response = await fetch('/api/like'); // Fetch liked recipes from API
-        if (!response.ok) throw new Error('Failed to fetch likes');
+        const response = await fetch(`/api/like?userId=${userId}`);
+        if (!response.ok) throw new Error("Failed to fetch likes");
         const result: Like[] = await response.json();
-        setLikes(result); // Store liked recipes in the state
+        setLikes(result);
+        setLikedRecipes(result.map((like) => like.recipeId)); // Store liked recipes
       } catch (err) {
-        if (err instanceof Error) {
-          setError(err.message); // Set error message if fetching fails
-        } else {
-          setError('An unknown error occurred');
-        }
+        setError(err instanceof Error ? err.message : "An unknown error occurred");
       } finally {
-        setLoading(false); // Turn off loading state
+        setLoading(false);
       }
     }
 
-    fetchLikes(); // Call the fetch function
+    fetchLikes();
   }, []);
 
-  // Show loading or error state
+  const toggleLike = useCallback(async (recipeId: number) => {
+    const isLiked = likedRecipes.includes(recipeId);
+    setLikedRecipes((prev) =>
+      isLiked ? prev.filter((id) => id !== recipeId) : [...prev, recipeId]
+    );
+
+    try {
+      const response = await fetch(`/api/like`, {
+        method: isLiked ? "DELETE" : "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ userId: 1, recipeId }), // Replace userId with actual auth user
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to update like status");
+      }
+    } catch (err) {
+      console.error(err);
+      setLikedRecipes((prev) =>
+        isLiked ? [...prev, recipeId] : prev.filter((id) => id !== recipeId)
+      ); // Revert UI on failure
+    }
+  }, [likedRecipes]);
+
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
   return (
     <div className="p-4">
-      <h2>Your Liked Recipes</h2>
-      <div className="recipe-list">
-        {likes.length > 0 ? (
-          likes.map((like) => (
-            <div key={like.id} className="recipe-card bg-gray-100 rounded-lg shadow-md p-4 mb-4">
-              <h3 className="font-semibold text-lg">{like.recipeName}</h3>
-              <p>Recipe ID: {like.recipeId}</p>
-              {/* Add other details about the liked recipe if necessary */}
+      <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4">
+        {likes.map((item) => (
+          <div
+            key={item.recipeId}
+            className="bg-gray-100 rounded-lg shadow-md overflow-hidden text-center 
+                      transition-transform duration-300 ease-in-out flex flex-col 
+                      hover:shadow-lg hover:-translate-y-1 relative"
+          >
+            {/* Recipe Image */}
+            <div className="flex justify-center p-3">
+              <img
+                src={item.recipeImage ? `${API_URL}/${item.recipeImage}` : "/fallback-image.jpg"}
+                alt={item.recipeName || "Recipe Image"}
+                className="w-40 h-40 object-cover rounded-md"
+                onError={(e) => (e.currentTarget.src = "/fallback-image.jpg")}
+              />
             </div>
-          ))
-        ) : (
-          <p>No liked recipes found</p>
-        )}
+
+            {/* Recipe Name & View Recipe Button */}
+            <div className="relative p-4 flex-grow">
+              <h3 className="mb-3 font-semibold text-lg">{item.recipeName}</h3>
+              <Link href={`/RecipeDescription/${encodeURIComponent(item.recipeName)}`}>
+                <button className="px-3 py-1.5 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
+                  RECIPE
+                </button>
+              </Link>
+            </div>
+
+            {/* Like Button */}
+            <i
+              className={`fa-solid fa-heart absolute top-2 right-2 border-2 text-xs border-[#FFECC1] 
+                          ${likedRecipes.includes(item.recipeId) ? "text-red-500 bg-yellow-300" : "text-slate-100 bg-[#EFBD4C]"} 
+                          hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] 
+                          active:bg-[#F8F8F8] rounded-full p-2 cursor-pointer`}
+              onClick={() => toggleLike(item.recipeId)}
+            ></i>
+          </div>
+        ))}
       </div>
     </div>
   );
