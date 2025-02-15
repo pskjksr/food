@@ -21,29 +21,41 @@ model Category {
 }
 
 model User {
-  id          Int      @id @default(autoincrement()) // รหัสผู้ใช้
-  email       String   @unique // อีเมลของผู้ใช้
-  password    String   // รหัสผ่านของผู้ใช้
-  role        Role     @default(USER) // บทบาทของผู้ใช้
-  createdAt   DateTime @default(now()) // เวลาที่ผู้ใช้ถูกสร้าง
-  updatedAt   DateTime @updatedAt // เวลาที่ข้อมูลผู้ใช้ถูกอัปเดต
+  id                     Int      @id @default(autoincrement()) 
+  email                  String   @unique 
+  password               String   
+  role                   Role     @default(USER) 
+  createdAt              DateTime @default(now()) 
+  updatedAt              DateTime @updatedAt 
 
-  // ฟิลด์โปรไฟล์ที่เพิ่มเข้าไปใน User
-  name        String?  // ชื่อผู้ใช้
-  phone       String?  // เบอร์โทรศัพท์ผู้ใช้
-  address     String?  // ที่อยู่ผู้ใช้
-  profileImage String? // รูปโปรไฟล์ของผู้ใช้
+  
+  name                   String?  
+  phone                  String?  
+  address                String?  
+  profileImage           String?  
 
-  recipes     Recipe[] // สูตรอาหารที่ผู้ใช้สร้าง
-  likes       Like[]   // ถูกใจสูตรอาหาร
-  views       View[]   // เข้าชมสูตรอาหาร
+  
+  emailVerificationToken String?  
+  emailVerified          Boolean  @default(false) 
+
+ 
+  resetPasswordToken     String?  
+  resetPasswordExpires   DateTime? 
+
+
+  recipes                Recipe[] 
+  likes                  Like[]   
+  views                  View[]   
+
+ 
+  deletedAt              DateTime? 
 }
+
 
 
 model Recipe {
   id              Int              @id @default(autoincrement())
   name            String
-  slug            String 
   description     String?
   ingredientDetails String?
   instructions    String?
@@ -54,31 +66,31 @@ model Recipe {
   categoryId      Int
   category        Category         @relation(fields: [categoryId], references: [id])
 
-  User            User[]           // ความสัมพันธ์กับ User
-  likes           Like[]           // ความสัมพันธ์กับ Like
-  views           View[]           // ความสัมพันธ์กับ View
+  User            User[]           
+  likes           Like[]           
+  views           View[]           
 }
 
 model Like {
   id         Int      @id @default(autoincrement())
-  userId     Int      // รหัสผู้ใช้ที่กด "ถูกใจ"
-  recipeId   Int      // รหัสสูตรอาหารที่ถูกใจ
-  createdAt  DateTime @default(now())  // เวลาเมื่อกด "ถูกใจ"
+  userId     Int      
+  recipeId   Int      
+  createdAt  DateTime @default(now())  
 
-  user       User     @relation(fields: [userId], references: [id])  // เชื่อมโยงกับ User
-  recipe     Recipe   @relation(fields: [recipeId], references: [id]) // เชื่อมโยงกับ Recipe
+  user       User     @relation(fields: [userId], references: [id])  
+  recipe     Recipe   @relation(fields: [recipeId], references: [id]) 
 
-  @@unique([userId, recipeId])  // จำกัดไม่ให้กด "ถูกใจ" ซ้ำ
+  @@unique([userId, recipeId]) 
 }
 
 model View {
   id         Int      @id @default(autoincrement())
-  userId     Int?     // รหัสผู้ใช้ที่เข้าชม (สามารถเป็น NULL ถ้าไม่ใช่ผู้ใช้ที่ล็อกอิน)
-  recipeId   Int      // รหัสสูตรอาหารที่เข้าชม
-  createdAt  DateTime @default(now())  // เวลาที่เข้าชม
+  userId     Int?     
+  recipeId   Int      
+  createdAt  DateTime @default(now())  
 
-  user       User?    @relation(fields: [userId], references: [id])   // เชื่อมโยงกับ User (ถ้ามี)
-  recipe     Recipe   @relation(fields: [recipeId], references: [id]) // เชื่อมโยงกับ Recipe
+  user       User?    @relation(fields: [userId], references: [id])  
+  recipe     Recipe   @relation(fields: [recipeId], references: [id]) 
 }
 
 
