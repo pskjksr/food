@@ -1,65 +1,104 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../utils/prismaClient"; // Ensure the path to your Prisma Client is correct
+import prisma from "../utils/prismaClient";
 
-interface RecipeQueryConditions {
-  categoryId?: number;
-  cuisineId?: number;
-}
-
+// ฟังก์ชัน GET สำหรับดึงข้อมูลสูตรอาหาร
 export async function GET(req: NextRequest) {
   const { searchParams } = new URL(req.url);
   const categoryId = searchParams.get("categoryId");
   const cuisineId = searchParams.get("cuisineId");
 
-  // Validate categoryId and cuisineId
+  // ตรวจสอบว่า categoryId และ cuisineId เป็นตัวเลขที่ถูกต้องหรือไม่
   if (
     (categoryId && isNaN(Number(categoryId))) ||
     (cuisineId && isNaN(Number(cuisineId)))
   ) {
     return NextResponse.json(
-      { error: "Invalid or missing categoryId or cuisineId. Please provide valid numeric values." },
+      { error: "Invalid categoryId or cuisineId." },
       { status: 400 }
     );
   }
 
   try {
-    // Initialize query conditions
-    const queryConditions: RecipeQueryConditions = {};
+    // สร้างเงื่อนไขการค้นหาตาม categoryId และ cuisineId
+    const queryConditions: { categoryId?: number; cuisineId?: number } = {};
 
-    if (categoryId) queryConditions.categoryId = Number(categoryId); // Filter by categoryId if present
-    if (cuisineId) queryConditions.cuisineId = Number(cuisineId); // Filter by cuisineId if present
+    if (categoryId) {
+      queryConditions.categoryId = Number(categoryId); // แปลงเป็นตัวเลข
+    }
+    if (cuisineId) {
+      queryConditions.cuisineId = Number(cuisineId); // แปลงเป็นตัวเลข
+    }
 
-    // Fetch recipes based on the provided filters
+    // ดึงข้อมูลสูตรจาก Prisma
     const recipes = await prisma.recipe.findMany({
       where: queryConditions,
       include: {
-        cuisine: true,  // Include related cuisine
-        category: true, // Include related category
-        ingredients: true, // Include related ingredients
+        cuisine: true,   // รวมข้อมูล cuisine
+        category: true,  // รวมข้อมูล category
+        ingredients: true, // รวมข้อมูล ingredients
       },
     });
 
-    // Return 404 if no recipes are found
+    // หากไม่พบสูตร
     if (recipes.length === 0) {
-      return NextResponse.json({ error: "No recipes found for the given filters." }, { status: 404 });
+      return NextResponse.json({ error: "No recipes found." }, { status: 404 });
     }
 
-    // Return the recipes if found
+    // ส่งกลับข้อมูลสูตร
     return NextResponse.json(recipes);
-  } catch (error: unknown) {
-    // Improved error handling with type check
-    if (error instanceof Error) {
-      console.error("Error fetching recipes:", error.message);
+  } catch (error) {
+    console.error("Error fetching recipes:", error);
+    return NextResponse.json(
+      { error: "Internal server error." },
+      { status: 500 }
+    );
+  }
+}
+
+
+export async function POST(req: NextRequest) {
+  try {
+    const body = await req.json();
+    console.log("📥 Received Data:", body); // Log ข้อมูลที่รับเข้ามา
+
+    const { name, description, ingredientDetails, instructions, image, cuisineId, categoryId, ingredients } = body;
+
+    if (!name || !cuisineId || !categoryId || !ingredients || ingredients.length === 0) {
       return NextResponse.json(
-        { error: "Internal server error. Please try again later.", details: error.message },
-        { status: 500 }
-      );
-    } else {
-      console.error("Unexpected error:", error);
-      return NextResponse.json(
-        { error: "An unexpected error occurred." },
-        { status: 500 }
+        { error: "กรุณากรอก Name, Cuisine, Category และ Ingredients ให้ครบ" },
+        { status: 400 }
       );
     }
+
+    console.log("🛠 Creating Recipe...");
+
+    const newRecipe = await prisma.recipe.create({
+      data: {
+        name,
+        description,
+        ingredientDetails,
+        instructions,
+        image,
+        cuisineId: Number(cuisineId),
+        categoryId: Number(categoryId),
+        ingredients: {
+          create: ingredients.map((ingredient: { name: string; quantity: number }) => ({
+            ingredient: { connectOrCreate: { where: { name: ingredient.name }, create: { name: ingredient.name } } },
+            quantity: ingredient.quantity,
+          })),
+        },
+      },
+    });
+
+    console.log("✅ Recipe Created:", newRecipe); // Log ข้อมูลที่สร้างสำเร็จ
+    return NextResponse.json(newRecipe, { status: 201 });
+
+  } catch (error: any) {
+    console.error("❌ Error adding recipe:", error);
+
+    return NextResponse.json(
+      { error: error.message || "เกิดข้อผิดพลาดในการเพิ่มสูตรอาหาร" },
+      { status: 500 }
+    );
   }
 }

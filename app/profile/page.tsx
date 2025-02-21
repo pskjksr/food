@@ -1,54 +1,71 @@
 "use client";
-import React, { useState, useEffect } from 'react';
-import Link from 'next/link';
+
+import { useState, useEffect } from "react";
+import Link from "next/link";
+import Image from "next/image";
 
 function Profile() {
-  const [name, setName] = useState('User Name');
-  const [email, setEmail] = useState('user@example.com');
-  const [isEditing, setIsEditing] = useState(false);
-  const [image, setImage] = useState(null);
+  const DEFAULT_IMAGE = "/uploads/default-avatar.jpg"; // รูปโปรไฟล์เริ่มต้น
 
+  const [name, setName] = useState<string | null>(null);
+  const [email, setEmail] = useState<string | null>(null);
+  const [isEditing, setIsEditing] = useState(false);
+  const [profileImage, setProfileImage] = useState<string>(DEFAULT_IMAGE);
+
+  // ดึงข้อมูลผู้ใช้จาก API (GET /api/user)
   useEffect(() => {
-    fetch('/api/user')
+    fetch("/api/user")
       .then((res) => res.json())
       .then((data) => {
-        setName(data.name);
-        setEmail(data.email);
-        setImage(data.image || '/shin.jpg');
+        if (data) {
+          setName(data.name || ""); // ใช้ค่า API ถ้ามี
+          setEmail(data.email || ""); // ใช้ค่า API ถ้ามี
+          setProfileImage(data.profileImage || DEFAULT_IMAGE);
+        }
       })
-      .catch((err) => console.error('Error fetching user data:', err));
+      .catch((err) => console.error("Error fetching user data:", err));
   }, []);
 
+  // ฟังก์ชันสำหรับบันทึกข้อมูลอัปเดต (PUT /api/user)
   const handleSave = () => {
-    fetch('/api/user', {
-      method: 'PUT',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ name, image })
+    fetch("/api/user", {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ name, profileImage }),
     })
       .then((res) => res.json())
       .then((data) => {
-        setName(data.name);
-        setImage(data.image);
+        setName(data.name || "");
+        setProfileImage(data.profileImage || DEFAULT_IMAGE);
         setIsEditing(false);
       })
-      .catch((err) => console.error('Error updating profile:', err));
+      .catch((err) => console.error("Error updating profile:", err));
   };
 
-  const handleImageChange = (e) => {
-    if (e.target.files) {
+  // ฟังก์ชันสำหรับอัปโหลดรูปโปรไฟล์ (POST /api/upload)
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files && e.target.files.length > 0) {
       const file = e.target.files[0];
       const formData = new FormData();
-      formData.append('image', file);
+      formData.append("image", file);
 
-      fetch('/api/upload', {
-        method: 'POST',
-        body: formData
+      fetch("/api/upload", {
+        method: "POST",
+        body: formData,
       })
         .then((res) => res.json())
         .then((data) => {
-          setImage(data.imageUrl);
+          if (data.imageUrl) {
+            setProfileImage(data.imageUrl);
+          } else {
+            console.error("Upload error:", data.error);
+            setProfileImage(DEFAULT_IMAGE);
+          }
         })
-        .catch((err) => console.error('Error uploading image:', err));
+        .catch((err) => {
+          console.error("Error uploading image:", err);
+          setProfileImage(DEFAULT_IMAGE);
+        });
     }
   };
 
@@ -59,12 +76,17 @@ function Profile() {
       </h2>
       <div className="flex flex-row items-start rounded-lg">
         <div className="relative mr-12">
-          <img
-            src={image}
+          <Image
+            src={profileImage}
             alt="Profile"
-            className="w-72 h-60 rounded-lg object-cover shadow-sm"
+            width={288}
+            height={240}
+            className="rounded-lg object-cover shadow-sm"
           />
-          <label htmlFor="image-upload" className="absolute top-2 left-2 bg-black text-white rounded-full p-2 cursor-pointer w-10 h-10 flex items-center justify-center">
+          <label
+            htmlFor="image-upload"
+            className="absolute top-2 left-2 bg-black text-white rounded-full p-2 cursor-pointer w-10 h-10 flex items-center justify-center"
+          >
             📷
           </label>
           <input
@@ -81,27 +103,41 @@ function Profile() {
             {isEditing ? (
               <input
                 type="text"
-                value={name}
+                value={name || ""}
                 onChange={(e) => setName(e.target.value)}
                 className="border p-1 ml-2"
               />
             ) : (
-              <span className="block text-gray-500">{name}</span>
+              <span className="block text-gray-500">{name || "Loading..."}</span>
             )}
           </p>
           <p className="mb-4 text-gray-700">
-            <strong>Email:</strong> <span className="text-gray-500">{email}</span>
+            <strong>Email:</strong> <span className="text-gray-500">{email || "Loading..."}</span>
           </p>
           {isEditing ? (
-            <button onClick={handleSave} className="bg-blue-500 text-white px-4 py-1 rounded-md">Save</button>
+            <button
+              onClick={handleSave}
+              className="bg-blue-500 text-white px-4 py-1 rounded-md"
+            >
+              Save
+            </button>
           ) : (
-            <button onClick={() => setIsEditing(true)} className="bg-gray-300 px-3 py-1 rounded-md">Edit</button>
+            <button
+              onClick={() => setIsEditing(true)}
+              className="bg-gray-300 px-3 py-1 rounded-md"
+            >
+              Edit
+            </button>
           )}
         </div>
       </div>
       <div className="mt-6 flex space-x-4">
-        <Link href="/likes" className="bg-green-500 text-white px-4 py-2 rounded-md">My Likes</Link>
-        <Link href="/dashboard" className="bg-purple-500 text-white px-4 py-2 rounded-md">Dashboard</Link>
+        <Link href="/Like" className="bg-green-500 text-white px-4 py-2 rounded-md">
+          My Likes
+        </Link>
+        <Link href="/dashboard" className="bg-purple-500 text-white px-4 py-2 rounded-md">
+          Dashboard
+        </Link>
       </div>
     </div>
   );

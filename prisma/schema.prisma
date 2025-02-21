@@ -32,7 +32,8 @@ model User {
   name                   String?  
   phone                  String?  
   address                String?  
-  profileImage           String?  
+  profileImage           String?   @default("/default-avatar.jpg")
+
 
   
   emailVerificationToken String?  

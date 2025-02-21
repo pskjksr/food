@@ -24,7 +24,7 @@ function Recovery() {
     setLoading(true); 
 
     try {
-      const response = await fetch("http://localhost:3000/api/recovery", {
+      const response = await fetch(`${process.env.NEXT_PUBLIC_API_URL}/api/forgot-password`, {
         method: 'POST',
         headers: {
           'Content-Type': 'application/json',
@@ -35,7 +35,8 @@ function Recovery() {
       if (response.ok) {
         setSuccess(true); 
       } else {
-        setError("Failed to send recovery email. Please try again.");
+        const data = await response.json();
+        setError(data?.error || "Failed to send recovery email. Please try again.");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
