@@ -2,18 +2,15 @@
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
+import prisma from "../db/prisma"; // Prisma client
 
 export async function POST(req: Request) {
   try {
     const formData = await req.formData();
     const file = formData.get("image");
 
-    console.log("File received:", file);
-    console.log("Type of file:", typeof file);
-
     // ตรวจสอบว่า file เป็น instance ของ File
     if (!(file instanceof File)) {
-      console.error("File is not valid:", file);
       return NextResponse.json({ error: "Invalid file upload" }, { status: 400 });
     }
 
@@ -21,10 +18,22 @@ export async function POST(req: Request) {
     const buffer = Buffer.from(await file.arrayBuffer());
     const filePath = path.join(process.cwd(), "public", "uploads", fileName);
 
+    // บันทึกไฟล์ลงใน public/uploads
     await writeFile(filePath, buffer);
 
     const imageUrl = `/uploads/${fileName}`;
-    console.log("File saved at:", filePath);
+
+    // อัปเดต URL ของรูปภาพในฐานข้อมูล
+    const userId = req.headers.get("user-id"); // หาค่า userId จาก request header หรือวิธีการอื่น ๆ ที่คุณใช้
+    if (userId) {
+      await prisma.user.update({
+        where: { id: Number(userId) },
+        data: {
+          profileImage: imageUrl,
+        },
+      });
+    }
+
     return NextResponse.json({ imageUrl }, { status: 200 });
   } catch (error: any) {
     console.error("Upload error:", error);

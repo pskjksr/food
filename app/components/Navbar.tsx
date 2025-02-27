@@ -1,5 +1,5 @@
 "use client";
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
@@ -26,6 +26,29 @@ function Navbar() {
     if (searchQuery.trim()) {
       router.push(`/search?query=${searchQuery}`);
     }
+  };
+
+  // ปิด dropdown เมื่อคลิกที่พื้นที่อื่น
+  useEffect(() => {
+    const handleClickOutside = (event: MouseEvent) => {
+      const dropdown = document.querySelector('.relative.group');
+      if (dropdown && !dropdown.contains(event.target as Node)) {
+        setIsDropdownOpen(false);
+      }
+    };
+
+    document.addEventListener('click', handleClickOutside);
+
+    return () => {
+      document.removeEventListener('click', handleClickOutside);
+    };
+  }, []);
+
+  // ฟังก์ชัน logout
+  const handleLogout = () => {
+    // ลบ token ออกจาก localStorage หรือ cookies
+    localStorage.removeItem("token");
+    router.push("/login"); // รีไดเร็กต์ไปยังหน้า login
   };
 
   return (
@@ -72,7 +95,7 @@ function Navbar() {
                 Profile
               </Link>
               <button
-                onClick={() => alert("Logging out...")}
+                onClick={handleLogout} // เรียกใช้ฟังก์ชัน logout
                 className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
               >
                 Logout

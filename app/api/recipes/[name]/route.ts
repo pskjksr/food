@@ -37,3 +37,29 @@ export async function GET(request: NextRequest, context: { params: { name: strin
     );
   }
 }
+
+export async function DELETE(req: NextRequest, { params }: { params: { name: string } }) {
+  const recipeName = decodeURIComponent(params.name); // ถอดรหัสชื่อจาก URL
+
+  try {
+    // ค้นหาสูตรอาหารจากชื่อ
+    const existingRecipe = await prisma.recipe.findFirst({
+      where: { name: recipeName },
+    });
+
+    // ถ้าไม่มีสูตรนี้อยู่
+    if (!existingRecipe) {
+      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
+    }
+
+    // ลบสูตรอาหาร
+    await prisma.recipe.delete({
+      where: { id: existingRecipe.id }, // ใช้ ID ที่ได้จากการค้นหาชื่อ
+    });
+
+    return NextResponse.json({ message: "Recipe deleted successfully" });
+  } catch (error) {
+    console.error("Error deleting recipe:", error);
+    return NextResponse.json({ error: "Failed to delete recipe" }, { status: 500 });
+  }
+}

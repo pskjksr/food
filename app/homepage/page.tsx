@@ -6,6 +6,7 @@ import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation"; // Use 'next/navigation' instead of 'next/router'
 
+
 // Dynamic imports without SSR
 const ThaiRecipes = dynamic(() => import("../components/thaiRecipes"), { ssr: false });
 const JapaneseRecipes = dynamic(() => import("../components/japaneseRecipes"), { ssr: false });

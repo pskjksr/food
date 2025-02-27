@@ -1,11 +1,14 @@
-// types/next.d.ts
-import { NextApiRequest } from 'next';
+// next-auth.d.ts
+import NextAuth from "next-auth";
 
-declare module 'next' {
-  interface NextApiRequest {
-    user?: {
-      userId: number;
-      role: string;
+declare module "next-auth" {
+  interface Session {
+    accessToken: string;
+    user: {
+      id: string;  // เพิ่ม id
+      name?: string;
+      email?: string;
+      image?: string;
     };
   }
 }

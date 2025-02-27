@@ -1,5 +1,3 @@
-"use client";
-
 import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
@@ -43,12 +41,16 @@ function LoginPage() {
         setFormStatus({ message: data.error || "Login failed. Please try again.", type: "error" });
       } else {
         setFormStatus({ message: "Logged in successfully!", type: "success" });
-        // รับ token จาก API
-        const { token } = await res.json();
-        // เก็บ token ใน localStorage (หรือใช้วิธีอื่นตามความเหมาะสม)
+        // รับ token และ role จาก API
+        const { token, user } = await res.json();
+        // เก็บ token ใน localStorage
         localStorage.setItem("authToken", token);
-        // เปลี่ยนเส้นทางไปยังหน้า dashboard หรือหน้าอื่น ๆ หลังล็อกอินสำเร็จ
-        router.push("/dashboard");
+
+        if (user.role === "ADMIN") {
+          router.push("/Recipevisitsgraph"); // ไปที่หน้า Recipe Visits Graph สำหรับแอดมิน
+        } else {
+          router.push("/homepage"); // ไปที่หน้า Profile สำหรับผู้ใช้ทั่วไป
+        }
       }
     } catch (error) {
       console.error("Error during login:", error);
@@ -73,7 +75,7 @@ function LoginPage() {
           Welcome Back to FoodFusion!
         </h1>
         <div className="flex items-center mt-3">
-          <p className="text-[30px] text-[#FFC94E]">Dot have an account?</p>
+          <p className="text-[30px] text-[#FFC94E]">Dont have an account?</p>
           <Link
             className="ml-2 text-[30px] font-bold text-[#A97500] underline decoration-[#A97500] hover:text-[#FFB100] hover:decoration-[#FFB100]"
             href="/signup"

@@ -12,7 +12,7 @@ function AdminAddRecipe() {
   const [description, setDescription] = useState("");
   const [ingredientDetails, setIngredientDetails] = useState("");
   const [instructions, setInstructions] = useState("");
-  const [image, setImage] = useState("");
+  const [image, setImage] = useState<File | null>(null);
   const [cuisineId, setCuisineId] = useState("");
   const [categoryId, setCategoryId] = useState("");
   const [ingredients, setIngredients] = useState<RecipeIngredient[]>([]);
@@ -20,7 +20,14 @@ function AdminAddRecipe() {
   const [error, setError] = useState("");
   const router = useRouter();
 
-  // เพิ่มชื่อส่วนผสมใหม่ในรายการ
+  // Handle file change
+  const handleImageChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    if (e.target.files) {
+      setImage(e.target.files[0]);
+    }
+  };
+
+  // Add ingredient to the list
   const addIngredient = () => {
     if (!ingredientName) {
       return;
@@ -32,7 +39,7 @@ function AdminAddRecipe() {
     setIngredientName("");
   };
 
-  // ลบส่วนผสมออกจากรายการโดยใช้ index
+  // Remove ingredient from the list
   const removeIngredient = (index: number) => {
     setIngredients(ingredients.filter((_, i) => i !== index));
   };
@@ -41,33 +48,43 @@ function AdminAddRecipe() {
     e.preventDefault();
     setError("");
 
-    // ตรวจสอบฟิลด์ที่จำเป็น
-    if (!name || !cuisineId || !categoryId) {
-      setError("Please fill in all required fields (Name, Cuisine, Category).");
+    // Validate required fields
+    if (!name || !cuisineId || !categoryId || ingredients.length === 0) {
+      setError("กรุณากรอก Name, Cuisine, Category และ Ingredients ให้ครบ");
+      return;
+    }
+
+    // Prepare form data to include the image file
+    const formData = new FormData();
+    formData.append("name", name);
+    formData.append("description", description);
+    formData.append("ingredientDetails", ingredientDetails);
+    formData.append("instructions", instructions);
+    if (image) {
+      formData.append("image", image); // Append the image file
+    }
+    formData.append("cuisineId", cuisineId);
+    formData.append("categoryId", categoryId);
+
+    // Check if ingredients array is valid before appending
+    if (ingredients.length > 0) {
+      formData.append("ingredients", JSON.stringify(ingredients)); // Send ingredients array as JSON
+    } else {
+      setError("กรุณาเพิ่มส่วนผสมให้ครบ");
       return;
     }
 
     try {
-      const res = await fetch("/api/recipe", {
+      const res = await fetch("/api/recipes", {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          name,
-          description,
-          ingredientDetails,
-          instructions,
-          image,
-          cuisineId: parseInt(cuisineId, 10),
-          categoryId: parseInt(categoryId, 10),
-          ingredients, // ส่ง array ของส่วนผสมที่มีแค่ { name }
-        }),
+        body: formData, // Send form data with image
       });
 
       if (!res.ok) {
         const data = await res.json();
         setError(data.error || "Failed to add recipe.");
       } else {
-        router.push("/admin/recipes");
+        router.push("/Recipevisitsgraph");
       }
     } catch (err) {
       setError("Something went wrong. Please try again.");
@@ -125,15 +142,13 @@ function AdminAddRecipe() {
           />
         </div>
 
-        {/* Image URL */}
+        {/* Image Upload */}
         <div>
-          <label className="block font-medium">Image URL</label>
+          <label className="block font-medium">Image</label>
           <input
-            type="text"
-            value={image}
-            onChange={(e) => setImage(e.target.value)}
+            type="file"
+            onChange={handleImageChange}
             className="w-full border p-2 rounded"
-            placeholder="Image URL"
           />
         </div>
 
@@ -147,11 +162,11 @@ function AdminAddRecipe() {
             required
           >
             <option value="">Select Cuisine</option>
-            <option value="13">ChineseRecipes</option>
-            <option value="15">CleanEatingRecipes</option>
-            <option value="11">japaneseRecipes</option>
-            <option value="12">thaiRecipes</option>
-            <option value="14">WesternRecipes</option>
+            <option value="13">Chinese Recipes</option>
+            <option value="15">Clean Eating Recipes</option>
+            <option value="11">Japanese Recipes</option>
+            <option value="12">Thai Recipes</option>
+            <option value="14">Western Recipes</option>
           </select>
         </div>
 
@@ -165,11 +180,11 @@ function AdminAddRecipe() {
             required
           >
             <option value="">Select Category</option>
-            <option value="21">breakfast</option>
-            <option value="24">dessert</option>
-            <option value="22">dinner</option>
-            <option value="25">drink</option>
-            <option value="23">lunch</option>
+            <option value="21">Breakfast</option>
+            <option value="24">Dessert</option>
+            <option value="22">Dinner</option>
+            <option value="25">Drink</option>
+            <option value="23">Lunch</option>
           </select>
         </div>
 
@@ -193,7 +208,6 @@ function AdminAddRecipe() {
               </div>
             ))}
           </div>
-          {/* Field to add a new ingredient */}
           <div className="flex space-x-2 mt-2">
             <input
               type="text"

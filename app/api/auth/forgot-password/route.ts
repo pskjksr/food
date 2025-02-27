@@ -1,36 +1,40 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../db/prisma"; // ✅ ตรวจสอบ path ให้ถูกต้อง
+import prisma from "../../db/prisma";  // เปลี่ยน path ตามโครงสร้างโปรเจค
+import { sendResetEmail } from "../../utils/email";  // ต้องมีฟังก์ชันส่งอีเมล
+import crypto from "crypto";
 
 export async function POST(req: NextRequest) {
   try {
     const { email } = await req.json();
+    console.log("📩 Email received:", email);
 
     if (!email) {
       return NextResponse.json({ error: "Email is required" }, { status: 400 });
     }
 
-    // 🔹 ค้นหาผู้ใช้ในฐานข้อมูล
-    const user = await prisma.user.findUnique({
-      where: { email },
-    });
+    const user = await prisma.user.findUnique({ where: { email } });
+    console.log("🔍 User found:", user);
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    // 🔹 สร้าง Token รีเซ็ตรหัสผ่าน (จำเป็นต้องเข้ารหัส)
-    const resetToken = Math.random().toString(36).substr(2, 8); // ตัวอย่าง (ควรใช้ JWT หรือ crypto)
+    // ✅ สร้าง resetToken และหมดอายุ 1 ชั่วโมง
+    const resetToken = crypto.randomBytes(32).toString("hex");
+    const resetTokenExpiry = new Date(Date.now() + 3600000); // 1 ชั่วโมง
+
+    // ✅ บันทึกลงฐานข้อมูล
     await prisma.user.update({
       where: { email },
-      data: { resetPasswordToken: resetToken, resetPasswordExpires: new Date(Date.now() + 3600000) }, // 1 ชั่วโมง
+      data: { resetToken, resetTokenExpiry },
     });
 
-    // 🔹 ส่งอีเมล (ต้องใช้บริการส่งอีเมล เช่น Nodemailer, SendGrid)
-    console.log(`Send reset email to ${email} with token: ${resetToken}`);
+    // ✅ ส่งอีเมลไปยังผู้ใช้
+    await sendResetEmail(email, resetToken);
 
     return NextResponse.json({ message: "Password reset email sent" });
   } catch (error) {
-    console.error("Forgot password error:", error);
+    console.error("❌ Forgot password error:", error);
     return NextResponse.json({ error: "Internal Server Error" }, { status: 500 });
   }
 }

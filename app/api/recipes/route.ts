@@ -54,51 +54,52 @@ export async function GET(req: NextRequest) {
     );
   }
 }
-
-
 export async function POST(req: NextRequest) {
   try {
-    const body = await req.json();
-    console.log("📥 Received Data:", body); // Log ข้อมูลที่รับเข้ามา
+    const body = await req.formData(); // ใช้ formData แทน json()
+    console.log("📥 Received Data:", body);
 
-    const { name, description, ingredientDetails, instructions, image, cuisineId, categoryId, ingredients } = body;
+    // ดึงข้อมูลจาก formData
+    const name = body.get("name")?.toString();
+    const description = body.get("description")?.toString();
+    const ingredientDetails = body.get("ingredientDetails")?.toString();
+    const instructions = body.get("instructions")?.toString();
+    const image = body.get("image");
+    const cuisineId = body.get("cuisineId")?.toString();
+    const categoryId = body.get("categoryId")?.toString();
+    const ingredientsJson = body.get("ingredients")?.toString();
 
-    if (!name || !cuisineId || !categoryId || !ingredients || ingredients.length === 0) {
+    if (!name || !cuisineId || !categoryId || !ingredientsJson || ingredientsJson === "[]") {
       return NextResponse.json(
         { error: "กรุณากรอก Name, Cuisine, Category และ Ingredients ให้ครบ" },
         { status: 400 }
       );
     }
 
-    console.log("🛠 Creating Recipe...");
+    // แปลง ingredients จาก JSON string เป็น array
+    const ingredients = JSON.parse(ingredientsJson);
 
+    // สร้างสูตรอาหารใหม่ในฐานข้อมูล
     const newRecipe = await prisma.recipe.create({
       data: {
         name,
         description,
         ingredientDetails,
         instructions,
-        image,
+        image: image ? image.toString() : null, // Handle image if exists
         cuisineId: Number(cuisineId),
         categoryId: Number(categoryId),
         ingredients: {
-          create: ingredients.map((ingredient: { name: string; quantity: number }) => ({
+          create: ingredients.map((ingredient: { name: string }) => ({
             ingredient: { connectOrCreate: { where: { name: ingredient.name }, create: { name: ingredient.name } } },
-            quantity: ingredient.quantity,
           })),
         },
       },
     });
 
-    console.log("✅ Recipe Created:", newRecipe); // Log ข้อมูลที่สร้างสำเร็จ
     return NextResponse.json(newRecipe, { status: 201 });
-
   } catch (error: any) {
-    console.error("❌ Error adding recipe:", error);
-
-    return NextResponse.json(
-      { error: error.message || "เกิดข้อผิดพลาดในการเพิ่มสูตรอาหาร" },
-      { status: 500 }
-    );
+    console.error("Error adding recipe:", error);
+    return NextResponse.json({ error: error.message || "เกิดข้อผิดพลาดในการเพิ่มสูตรอาหาร" }, { status: 500 });
   }
 }
