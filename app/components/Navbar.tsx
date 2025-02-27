@@ -4,11 +4,21 @@ import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
 import Search from "../components/Search"; // ตรวจสอบ path ว่าตรงกับโครงสร้างโฟลเดอร์จริง
+import { useSession, signOut } from "next-auth/react";
+
 
 function Navbar() {
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [searchQuery, setSearchQuery] = useState<string>(""); // ระบุประเภทให้ชัดเจน
   const router = useRouter();
+
+  const { data: session, status: sessionStatus} = useSession(); // ดึงข้อมูล session จาก hook useSession
+
+  useEffect(() => {
+    if (sessionStatus == 'authenticated') {
+      console.log("session", session);
+    }
+  }, []);
 
   const scrollToSection = () => {
     const section = document.getElementById("recipe-section");
@@ -82,24 +92,46 @@ function Navbar() {
         {/* ปุ่มโปรไฟล์ */}
         <div className="relative group">
           <div
-            className="border-[#FFECC1] bg-[#EFBD4C] text-white border-2 rounded-full w-12 h-12 flex items-center justify-center cursor-pointer hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8]"
+            className="border-[#FFECC1] bg-[#EFBD4C] text-white border-2 rounded-full w-12 h-12 flex items-center overflow-hidden justify-center cursor-pointer hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8]"
             onClick={toggleDropdown}
           >
-            <i className="fas fa-user group-hover:text-[#FFB100]"></i>
+            {/* ถ้ามี session ให้แสดงรูปโปรไฟล์ */}
+            {sessionStatus == 'authenticated' && session?.user?.profileImage && (
+              <Image src={session.user.profileImage} width={50} height={50} alt="profile" className="w-full h-full object-cover" />
+            )}
+            {/* ถ้าไม่มี session ให้แสดงไอคอน user */}
+            {sessionStatus != 'authenticated' && (
+               <i className="fas fa-user group-hover:text-[#FFB100]"></i>
+            )}
           </div>
 
           {/* เมนู Dropdown */}
           {isDropdownOpen && (
             <div className="absolute right-0 mt-2 w-40 bg-white border border-gray-300 rounded-lg shadow-lg z-10">
-              <Link href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
-                Profile
-              </Link>
-              <button
-                onClick={handleLogout} // เรียกใช้ฟังก์ชัน logout
-                className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
-              >
-                Logout
-              </button>
+              {/* ถ้ายังไม่มี session ให้แสดงปุ่ม Login และ Register */}
+              {sessionStatus == 'authenticated' && (
+                <>
+                  <Link href="/profile" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    Profile
+                  </Link>
+                  <button
+                    onClick={() => signOut()} // เรียกใช้ฟังก์ชัน logout
+                    className="block w-full text-left px-4 py-2 text-gray-700 hover:bg-gray-100"
+                  >
+                    Logout
+                  </button>
+                </>
+              )}
+              {sessionStatus != 'authenticated' && (
+                <>
+                  <Link href="/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    Login
+                  </Link>
+                  <Link href="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                    Register
+                  </Link>
+                </>
+              )}
             </div>
           )}
         </div>

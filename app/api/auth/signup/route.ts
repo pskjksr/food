@@ -1,7 +1,7 @@
 // app/api/auth/signup/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import bcrypt from "bcrypt";
-import prisma from "../../utils/prismaClient";
+import prisma from "../../../../utils/prismaClient";
 
 export async function POST(req: NextRequest) {
   try {

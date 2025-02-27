@@ -42,9 +42,6 @@ export default function Profile() {
 
         const res = await fetch(`/api/user/${session.user.id}`, {
           method: "GET",
-          headers: {
-            Authorization: `Bearer ${session.accessToken}`,
-          },
         });
 
         if (!res.ok) {
@@ -78,7 +75,7 @@ export default function Profile() {
         method: "PUT",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${session.accessToken}`,
+          
         },
         body: JSON.stringify({ name, profileImage }),
       });
@@ -131,7 +128,7 @@ export default function Profile() {
           method: "PUT",
           headers: {
             "Content-Type": "application/json",
-            Authorization: `Bearer ${session.accessToken}`,
+            
           },
           body: JSON.stringify({ profileImage: newImageUrl }),
         });

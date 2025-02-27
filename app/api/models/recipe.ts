@@ -1,5 +1,5 @@
 // /models/recipe.model.ts
-import prisma from '../utils/prismaClient';
+import prisma from "@/utils/prismaClient";
 
 export interface Recipe {
   id: number;

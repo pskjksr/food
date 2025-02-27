@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../utils/prismaClient";
+import prisma from "@/utils/prismaClient";
 
 // ฟังก์ชัน GET สำหรับดึงข้อมูลสูตรอาหาร
 export async function GET(req: NextRequest) {

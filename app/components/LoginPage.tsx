@@ -2,6 +2,9 @@ import { useState } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import { useRouter } from "next/navigation";
+import {signIn, useSession} from "next-auth/react"
+
+
 
 function LoginPage() {
   const [email, setEmail] = useState("");
@@ -22,41 +25,53 @@ function LoginPage() {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
-    e.preventDefault();
-    if (!validateForm()) return;
+  const {data: session, status: sessionStatus} = useSession()
+  if (sessionStatus === 'authenticated'){
+    router.push('/homepage')
+  }
 
-    try {
-      // ส่งข้อมูลล็อกอินไปยัง API ด้วย JSON
-      const res = await fetch("/api/auth/login", {
-        method: "POST",
-        headers: {
-          "Content-Type": "application/json",
-        },
-        body: JSON.stringify({ email, password }),
-      });
+  const handleLogin = async() =>{
+    await signIn('credentials',{
+      email: email,
+      password: password
+    })
+  }
 
-      if (!res.ok) {
-        const data = await res.json();
-        setFormStatus({ message: data.error || "Login failed. Please try again.", type: "error" });
-      } else {
-        setFormStatus({ message: "Logged in successfully!", type: "success" });
-        // รับ token และ role จาก API
-        const { token, user } = await res.json();
-        // เก็บ token ใน localStorage
-        localStorage.setItem("authToken", token);
+  // const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+  //   e.preventDefault();
+  //   if (!validateForm()) return;
 
-        if (user.role === "ADMIN") {
-          router.push("/Recipevisitsgraph"); // ไปที่หน้า Recipe Visits Graph สำหรับแอดมิน
-        } else {
-          router.push("/homepage"); // ไปที่หน้า Profile สำหรับผู้ใช้ทั่วไป
-        }
-      }
-    } catch (error) {
-      console.error("Error during login:", error);
-      setFormStatus({ message: "Something went wrong. Please try again later.", type: "error" });
-    }
-  };
+  //   try {
+  //     // ส่งข้อมูลล็อกอินไปยัง API ด้วย JSON
+  //     const res = await fetch("/api/auth/login", {
+  //       method: "POST",
+  //       headers: {
+  //         "Content-Type": "application/json",
+  //       },
+  //       body: JSON.stringify({ email, password }),
+  //     });
+
+  //     if (!res.ok) {
+  //       const data = await res.json();
+  //       setFormStatus({ message: data.error || "Login failed. Please try again.", type: "error" });
+  //     } else {
+  //       setFormStatus({ message: "Logged in successfully!", type: "success" });
+  //       // รับ token และ role จาก API
+  //       const { token, user } = await res.json();
+  //       // เก็บ token ใน localStorage
+  //       localStorage.setItem("authToken", token);
+
+  //       if (user.role === "ADMIN") {
+  //         router.push("/Recipevisitsgraph"); // ไปที่หน้า Recipe Visits Graph สำหรับแอดมิน
+  //       } else {
+  //         router.push("/homepage"); // ไปที่หน้า Profile สำหรับผู้ใช้ทั่วไป
+  //       }
+  //     }
+  //   } catch (error) {
+  //     console.error("Error during login:", error);
+  //     setFormStatus({ message: "Something went wrong. Please try again later.", type: "error" });
+  //   }
+  // };
 
   return (
     <div className="relative w-screen h-screen flex">
@@ -84,7 +99,6 @@ function LoginPage() {
           </Link>
         </div>
 
-        <form onSubmit={handleSubmit}>
           <div className="my-6 w-full">
             <input
               type="email"
@@ -134,11 +148,11 @@ function LoginPage() {
             <button
               type="submit"
               className="w-full border-2 text-[23px] border-[#FFECC1] bg-[#EFBD4C] text-[#fbfbfb] hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-xl py-1 text-center"
+              onClick={() => handleLogin()}
             >
               Log In
             </button>
           </div>
-        </form>
 
         {formStatus.message && (
           <div className={`mt-4 text-xl ${formStatus.type === "error" ? "text-red-500" : "text-green-500"}`}>

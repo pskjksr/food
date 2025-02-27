@@ -1,5 +1,5 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../utils/prismaClient"; // ตรวจสอบ path ให้ถูกต้อง
+import prisma from "@/utils/prismaClient"; // ตรวจสอบ path ให้ถูกต้อง
 
 export async function GET(req: NextRequest) {
   try {
