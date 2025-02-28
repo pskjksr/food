@@ -110,8 +110,7 @@ const RecipeCategories: React.FC = () => {
                 <h3 className="mb-4 font-semibold text-lg">{item.name}</h3>
                 {item.id ? (
                   <Link href={`/RecipeDescription/${item.id}`}>
-                    <button className="absolute right-4 bottom-1 px-4 py-2 bg-yellow-400 
-                                        text-gray-800 text-sm rounded-md hover:bg-yellow-500 
+                    <button className="absolute right-4 bottom-1 px-4 py-2border-2 p-2 border-2 text-sm rounded-lg  bg-yellow-400  border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8]
                                         transition-colors duration-300">
                       RECIPE
                     </button>

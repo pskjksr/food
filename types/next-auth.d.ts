@@ -18,6 +18,7 @@ declare module "next-auth" {
   // Extend Session to include the custom User properties
   interface Session {
     user: {
+      token: any;
       id: string; // NextAuth expects id as a string
       email: string;
       role: string;

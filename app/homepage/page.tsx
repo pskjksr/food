@@ -71,7 +71,7 @@ const Page: React.FC = () => {
             <h1 className="text-2xl font-bold text-gray-800 mb-4">Tteokbokki : 떡볶이</h1>
             <p className="text-gray-600 mb-6">Tteokbokki is a popular Korean street food made from soft rice cakes, fish cakes, and a sweet and spicy sauce called gochujang.</p>
             <Link href="/RecipeDescription/tteokbokki">
-              <button className="border-2 bg-yellow-400 text-white py-2 px-6 rounded-3xl shadow">RECIPE</button>
+            <button className="border-2 bg-yellow-400  border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] py-2 px-6 rounded-3xl shadow">RECIPE</button>
             </Link>
           </div>
         </div>
@@ -80,7 +80,7 @@ const Page: React.FC = () => {
       <section id="recipe-section" className="p-10">
         <h1 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">
           RECIPE
-          <span className="w-8 h-8 flex items-center justify-center bg-yellow-400 rounded-full cursor-pointer" onClick={() => setShowPopup(true)}>+</span>
+          <span className="w-8 h-8 flex items-center justify-center border-2 bg-yellow-400  border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] rounded-full cursor-pointer" onClick={() => setShowPopup(true)}>+</span>
         </h1>
 
         {/* ส่วนต่างๆ ของสูตรอาหาร (Japanese, Thai, etc.) */}
@@ -102,14 +102,16 @@ const Page: React.FC = () => {
         </div>
         <ChineseRecipes />
 
-        <h2>Western Cuisine</h2>
-        <Link href="/westernCuisine">
-          <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i></Link>
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">Western Cuisine</h2>
+          <Link href="/westernCuisine"><i className="fa-solid fa-chevron-right text-xl text-gray-500"></i></Link>
+        </div>
         <WesternRecipes />
 
-        <h2>Clean Eating Cuisine</h2>
-        <Link href="/cleanEatingCuisine">
-          <i className="fa-solid fa-chevron-right text-xl text-gray-500"></i></Link>
+        <div className="my-8 flex justify-between items-center">
+          <h2 className="text-lg font-semibold text-gray-700">Clean Eating Cuisine</h2>
+          <Link href="/cleanEatingCuisine"><i className="fa-solid fa-chevron-right text-xl text-gray-500"></i></Link>
+        </div>
         <CleanEatingRecipes />
       </section>
 

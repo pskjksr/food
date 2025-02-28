@@ -76,7 +76,7 @@ export default function CleanEatingRecipes() {
             <div className="relative p-4 flex-grow">
               <h3 className="mb-3 font-semibold text-lg">{item.name}</h3>
               <Link href={`/RecipeDescription/${encodeURIComponent(item.name)}`}>
-                <button className="px-3 py-1.5 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
+                <button className="px-3 py-1.5 border-2  text-sm rounded-lg  bg-yellow-400  border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] transition-colors duration-300">
                   RECIPE
                 </button>
               </Link>

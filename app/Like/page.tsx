@@ -1,6 +1,7 @@
 "use client";
 import React, { useEffect, useState, useCallback } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react"; // Import useSession hook
 
 interface Like {
   id: number;
@@ -12,38 +13,36 @@ interface Like {
 const API_URL = process.env.NEXT_PUBLIC_API_URL || ""; // Define API_URL
 
 const LikePage = () => {
+  const { data: session, status } = useSession(); // Use the session from next-auth
   const [likes, setLikes] = useState<Like[]>([]);
   const [likedRecipes, setLikedRecipes] = useState<number[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
+  // Fetch likes when the session is available
   useEffect(() => {
-    async function fetchLikes() {
-      const token = localStorage.getItem("authToken");
-      const userId = localStorage.getItem("userId");
+    if (status === "loading") return; // Wait until the session is loaded
 
-      if (!token || !userId) {
-        setError("Authentication required. Please login.");
-        setLoading(false);
-        return;
-      }
+    if (!session) {
+      setError("Authentication required. Please login.");
+      setLoading(false);
+      return;
+    }
 
+    const fetchLikes = async () => {
       try {
-        const response = await fetch(`/api/like?userId=${userId}`, {
-          headers: {
-            Authorization: `Bearer ${token}`,
-          },
+        const response = await fetch(`/api/likes?userId=${session.user?.id}`, {
+          headers: {},
         });
 
         if (!response.ok) throw new Error("Failed to fetch likes");
 
         const result = await response.json();
-        console.log("API Result:", result); // ตรวจสอบข้อมูลที่ได้รับจาก API
+        console.log("API Result:", result);
 
-        // ตรวจสอบว่าข้อมูลที่ได้รับเป็นอาร์เรย์ที่ถูกต้อง
         if (Array.isArray(result.likes)) {
           setLikes(result.likes);
-          setLikedRecipes(result.likes.map((like) => like.recipeId)); // Store liked recipes
+          setLikedRecipes(result.likes.map((like: { recipeId: any; }) => like.recipeId)); // Store liked recipes
         } else {
           setError("Invalid data format received. Please try again later.");
         }
@@ -53,16 +52,13 @@ const LikePage = () => {
       } finally {
         setLoading(false);
       }
-    }
+    };
 
     fetchLikes();
-  }, []);
+  }, [status, session]);
 
   const toggleLike = useCallback(async (recipeId: number) => {
-    const token = localStorage.getItem("authToken");
-    const userId = localStorage.getItem("userId");
-
-    if (!token || !userId) {
+    if (!session) {
       setError("Authentication required. Please login.");
       return;
     }
@@ -73,13 +69,12 @@ const LikePage = () => {
     );
 
     try {
-      const response = await fetch(`/api/like`, {
+      const response = await fetch(`/api/likes`, {
         method: isLiked ? "DELETE" : "POST",
         headers: {
           "Content-Type": "application/json",
-          Authorization: `Bearer ${token}`,
         },
-        body: JSON.stringify({ userId, recipeId }), // Use actual userId from auth
+        body: JSON.stringify({ userId: session.user?.id, recipeId }), // Use userId instead of email
       });
 
       if (!response.ok) {
@@ -91,16 +86,20 @@ const LikePage = () => {
         isLiked ? [...prev, recipeId] : prev.filter((id) => id !== recipeId)
       ); // Revert UI on failure
     }
-  }, [likedRecipes]);
+  }, [likedRecipes, session]);
 
+  // Error or loading states
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">{error}</div>;
 
   return (
     <div className="p-4">
+      {/* Title: My Likes */}
+      <h2 className="text-2xl font-bold mb-4">My Likes</h2>
+
       <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4">
         {likes.length === 0 ? (
-          <div>No likes found. Please add some favorites!</div> // ข้อความหากไม่มีข้อมูล
+          <div>No likes found. Please add some favorites!</div>
         ) : (
           likes.map((item) => (
             <div

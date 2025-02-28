@@ -24,10 +24,10 @@ const Search: React.FC<SearchProps> = ({ searchQuery, setSearchQuery, handleSear
 
   return (
     <form onSubmit={handleSearchWithRedirect}>
-      <div className="bg-[#EFBD4C] flex items-center rounded-full p-1 group hover:bg-[#FFECC1] border-2 border-[#FFECC1]">
+      <div className="bg-[#EFBD4C] flex items-center rounded-full p-1 group hover:bg-[#FFECC1] border-2 border-[#FFECC1] hover:border-[#EFBD4C]">
         <input
           type="text"
-          className="bg-transparent rounded-full px-4 outline-none text-white placeholder-white group-hover:text-[#FFB100]"
+          className="bg-transparent rounded-full px-4 outline-none text-white  placeholder-white group-hover:placeholder-[#FFB100] group-hover:text-[#FFB100]"
           placeholder="ค้นหา..."
           value={searchQuery}
           onChange={(e) => setSearchQuery(e.target.value)}
