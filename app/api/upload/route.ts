@@ -1,4 +1,3 @@
-// app/api/upload/route.ts
 import { NextResponse } from "next/server";
 import { writeFile } from "fs/promises";
 import path from "path";
@@ -14,7 +13,12 @@ export async function POST(req: Request) {
       return NextResponse.json({ error: "Invalid file upload" }, { status: 400 });
     }
 
-    const fileName = file.name;
+    const allowedTypes = ["image/jpeg", "image/png"];
+    if (!allowedTypes.includes(file.type)) {
+      return NextResponse.json({ error: "Invalid file type" }, { status: 400 });
+    }
+
+    const fileName = `${Date.now()}-${file.name}`; // Add a unique timestamp to the filename
     const buffer = Buffer.from(await file.arrayBuffer());
     const filePath = path.join(process.cwd(), "public", "uploads", fileName);
 

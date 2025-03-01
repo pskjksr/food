@@ -5,6 +5,7 @@ import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
 import { useRouter } from "next/navigation"; // Use 'next/navigation' instead of 'next/router'
+import RandomRecipe from "../components/random";
 
 
 // Dynamic imports without SSR
@@ -62,20 +63,16 @@ const Page: React.FC = () => {
 
   return (
     <>
-      {/* ส่วนของเนื้อหาหลัก (Tteokbokki และส่วนของประเภทอาหารต่างๆ) */}
-      <section className="flex flex-col items-center justify-center px-10 relative">
-        <div className="absolute -left-1/3 bottom-0 w-[950px] h-[850px] bg-yellow-400 rounded-full z-[-1]" />
-        <div className="flex flex-col md:flex-row items-center gap-6 z-10">
-          <Image src="/teokbokki.png" alt="Tteokbokki" width={500} height={300} className="w-full md:w-[500px] rounded-lg" />
-          <div className="max-w-md text-center md:text-left">
-            <h1 className="text-2xl font-bold text-gray-800 mb-4">Tteokbokki : 떡볶이</h1>
-            <p className="text-gray-600 mb-6">Tteokbokki is a popular Korean street food made from soft rice cakes, fish cakes, and a sweet and spicy sauce called gochujang.</p>
-            <Link href="/RecipeDescription/tteokbokki">
-            <button className="border-2 bg-yellow-400  border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] py-2 px-6 rounded-3xl shadow">RECIPE</button>
-            </Link>
-          </div>
-        </div>
-      </section>
+     <section className="flex flex-col items-center justify-center px-10 relative min-h-screen">
+  {/* Yellow Circle Background */}
+  <div className="absolute -left-1/3 bottom-0 w-[950px] h-[850px] bg-yellow-400 rounded-full z-[-1]" />
+
+  {/* Content Section: This can be filled with your content */}
+  <div className="flex flex-col md:flex-row items-center gap-6 z-10 -ml-16">
+    {/* Add your content here */}<RandomRecipe /> 
+  </div>
+</section>
+
 
       <section id="recipe-section" className="p-10">
         <h1 className="text-2xl font-bold text-gray-800 mb-4 flex items-center gap-2">

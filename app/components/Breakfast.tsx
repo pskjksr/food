@@ -23,7 +23,7 @@ export default function CleanEatingRecipes() {
   useEffect(() => {
     async function fetchRecipes() {
       try {
-        const response = await fetch(`${API_URL}/api/recipes?cuisineId=11`);
+        const response = await fetch(`${API_URL}/api/recipes?categoryId=21`);
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Recipe[] = await response.json();

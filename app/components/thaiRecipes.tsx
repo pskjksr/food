@@ -2,8 +2,9 @@
 
 import React, { useEffect, useState } from "react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-// กำหนด Type สำหรับ Recipe
+// Define Type for Recipe
 interface Recipe {
   id: number;
   name: string;
@@ -11,13 +12,14 @@ interface Recipe {
 }
 
 export default function CleanEatingRecipes() {
+  const { data: session, status } = useSession(); // Get session from next-auth
   const [recipes, setRecipes] = useState<Recipe[]>([]);
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
-  const [likedRecipes, setLikedRecipes] = useState<number[]>([]); // เก็บเมนูที่ถูก Like
-
+  const [likedRecipes, setLikedRecipes] = useState<number[]>([]); // To store liked recipes
   const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
 
+  // Fetch recipes
   useEffect(() => {
     async function fetchRecipes() {
       try {
@@ -40,15 +42,65 @@ export default function CleanEatingRecipes() {
     fetchRecipes();
   }, [API_URL]);
 
-  // ฟังก์ชัน Toggle กดไลก์ / ยกเลิกไลก์
-  const toggleLike = (recipeId: number) => {
-    setLikedRecipes((prevLikedRecipes) =>
-      prevLikedRecipes.includes(recipeId)
-        ? prevLikedRecipes.filter((id) => id !== recipeId) // เอาออกจากรายการไลก์
-        : [...prevLikedRecipes, recipeId] // เพิ่มเข้าไปในรายการไลก์
-    );
-  };
+  // Fetch liked recipes
+  useEffect(() => {
+    async function fetchLikedRecipes() {
+      if (!session?.user?.id) {
+        console.error("User is not authenticated");
+        return;
+      }
 
+      try {
+        const response = await fetch(`${API_URL}/api/likes`, {
+          method: "GET",
+          headers: {
+            
+          },
+        });
+
+        if (response.ok) {
+          const data = await response.json();
+          const likedRecipeIds = data.likes.map((like: any) => like.recipeId);
+          setLikedRecipes(likedRecipeIds);
+        } else {
+          console.error("Failed to fetch liked recipes");
+        }
+      } catch (err) {
+        console.error("Error fetching liked recipes:", err);
+      }
+    }
+
+    fetchLikedRecipes();
+  }, [API_URL, session]);
+
+  const toggleLike = async (recipeId: number) => {
+    if (!session) {
+      console.error("User is not authenticated");
+      return; // Stop if user is not authenticated
+    }
+  
+    // ถ้าผู้ใช้ได้ไลค์แล้ว เราจะลบออก
+    const method = likedRecipes.includes(recipeId) ? 'DELETE' : 'POST';
+    
+    const response = await fetch(`${API_URL}/api/likes`, {
+      method: method,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({ recipeId }),
+    });
+  
+    if (response.ok) {
+      setLikedRecipes((prevLikedRecipes) =>
+        method === 'POST'
+          ? [...prevLikedRecipes, recipeId] // เพิ่มไลค์
+          : prevLikedRecipes.filter((id) => id !== recipeId) // ลบไลค์
+      );
+    } else {
+      console.error("Failed to update like status");
+    }
+  };
+  
   if (loading) return <div>Loading...</div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
 
@@ -62,7 +114,6 @@ export default function CleanEatingRecipes() {
                       transition-transform duration-300 ease-in-out flex flex-col 
                       hover:shadow-lg hover:-translate-y-1 relative"
           >
-            {/* รูปภาพเมนู */}
             <div className="flex justify-center p-3">
               <img
                 src={item.image ? `${API_URL}/${item.image}` : "/fallback-image.jpg"}
@@ -72,17 +123,15 @@ export default function CleanEatingRecipes() {
               />
             </div>
 
-            {/* ชื่อเมนู & ปุ่มดูสูตร */}
             <div className="relative p-4 flex-grow">
               <h3 className="mb-3 font-semibold text-lg">{item.name}</h3>
               <Link href={`/RecipeDescription/${encodeURIComponent(item.name)}`}>
-                <button className="px-3 py-1.5 border-2  text-sm rounded-lg  bg-yellow-400  border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] transition-colors duration-300">
+                <button className="px-3 py-1.5 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
                   RECIPE
                 </button>
               </Link>
             </div>
 
-            {/* ปุ่มหัวใจ (Like) */}
             <i
               className={`fa-solid fa-heart absolute top-2 right-2 border-2 text-xs border-[#FFECC1] 
                           ${likedRecipes.includes(item.id) ? "text-red-500 bg-yellow-300" : "text-slate-100 bg-[#EFBD4C]"} 

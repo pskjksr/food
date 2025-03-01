@@ -6,7 +6,7 @@ import { useSession } from "next-auth/react"; // Import useSession hook
 interface Like {
   id: number;
   recipeId: number;
-  recipeName: string;
+  name: string;
   recipeImage?: string;
 }
 
@@ -112,7 +112,7 @@ const LikePage = () => {
               <div className="flex justify-center p-3">
                 <img
                   src={item.recipeImage ? `${API_URL}/${item.recipeImage}` : "/fallback-image.jpg"}
-                  alt={item.recipeName || "Recipe Image"}
+                  alt={item.name || "Recipe Image"}
                   className="w-40 h-40 object-cover rounded-md"
                   onError={(e) => (e.currentTarget.src = "/fallback-image.jpg")}
                 />
@@ -120,8 +120,8 @@ const LikePage = () => {
 
               {/* Recipe Name & View Recipe Button */}
               <div className="relative p-4 flex-grow">
-                <h3 className="mb-3 font-semibold text-lg">{item.recipeName}</h3>
-                <Link href={`/RecipeDescription/${encodeURIComponent(item.recipeName)}`}>
+                <h3 className="mb-3 font-semibold text-lg">{item.name}</h3>
+                <Link href={`/RecipeDescription/${encodeURIComponent(item.name)}`}>
                   <button className="px-3 py-1.5 bg-yellow-400 text-gray-800 text-sm rounded-md hover:bg-yellow-500 transition-colors duration-300">
                     RECIPE
                   </button>

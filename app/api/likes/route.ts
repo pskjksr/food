@@ -7,15 +7,31 @@ export async function GET() {
   try {
     const likes = await prisma.like.findMany({
       include: {
-        recipe: true, // รวมข้อมูลสูตรอาหารที่เกี่ยวข้องกับ like
+        recipe: {
+          select: {
+            id: true,
+            name: true,   // ✅ ดึงเฉพาะชื่อเมนู
+            image: true,  // ✅ ดึงเฉพาะรูปภาพเมนู
+          },
+        },
       },
     });
-    return NextResponse.json({ likes });
+
+    // ✅ จัดโครงสร้างข้อมูลก่อนส่งกลับไปที่ frontend
+    const formattedLikes = likes.map((like) => ({
+      id: like.id,
+      recipeId: like.recipe.id,
+      name: like.recipe.name || "Unknown Recipe",  // ✅ ป้องกันกรณี `null`
+      recipeImage: like.recipe.image || "/fallback-image.jpg",
+    }));
+
+    return NextResponse.json({ likes: formattedLikes });
   } catch (error) {
     console.error("Error fetching likes:", error);
     return NextResponse.json({ error: "Failed to fetch likes" }, { status: 500 });
   }
 }
+
 // ฟังก์ชัน POST - เพิ่ม Like สำหรับผู้ใช้
 export async function POST(req: Request) {
   try {

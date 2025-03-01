@@ -59,9 +59,9 @@ model User {
 model Recipe {
   id              Int              @id @default(autoincrement())
   name            String
-  description     String?
-  ingredientDetails String?
-  instructions    String?
+  description     String   @db.Text 
+  ingredientDetails String   @db.Text 
+  instructions    String   @db.Text 
   cuisineId       Int
   cuisine         Cuisine          @relation(fields: [cuisineId], references: [id])
   ingredients     RecipeIngredient[]

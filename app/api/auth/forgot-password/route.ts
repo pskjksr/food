@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../db/prisma";  // เปลี่ยน path ตามโครงสร้างโปรเจค
-import { sendResetEmail } from "../../utils/email";  // ต้องมีฟังก์ชันส่งอีเมล
+import { sendResetEmail } from "../../db/sendResetEmail";  // ต้องมีฟังก์ชันส่งอีเมล
 import crypto from "crypto";
 
 export async function POST(req: NextRequest) {

@@ -26,9 +26,15 @@ function LoginPage() {
   };
 
   const {data: session, status: sessionStatus} = useSession()
-  if (sessionStatus === 'authenticated'){
-    router.push('/homepage')
+    if (sessionStatus === "authenticated") {
+    // ตรวจสอบ role และนำทางไปยังหน้าเหมาะสม
+    if (session.user.role === "ADMIN") {
+      router.push("/Recipevisitsgraph"); // สำหรับแอดมิน
+    } else {
+      router.push("/homepage"); // สำหรับผู้ใช้ทั่วไป
+    }
   }
+
 
   const handleLogin = async() =>{
     await signIn('credentials',{

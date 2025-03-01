@@ -14,6 +14,16 @@ const list_api_protect : IApiProtect[] = [
         method: 'get',
         pathname: '/api/protected',
         premission: 'admin'
+    },
+    {
+        method: 'get',
+        pathname: '/api/recipes/recipe-like',
+        premission: 'admin'
+    },
+    {
+        method: 'get',
+        pathname: '/api/recipes/latest',
+        premission: 'admin'
     }
 ]
 

@@ -2,46 +2,44 @@
 
 import { Chart } from "react-chartjs-2";
 import { useEffect, useState } from "react";
-import Link from "next/link";
+import Link from "next/link"; // Import Link for navigation
 import {
   Chart as ChartJS,
   CategoryScale,
   LinearScale,
-  PointElement,
-  LineElement,
+  BarElement,
   Tooltip,
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, PointElement, LineElement, Tooltip, Legend);
+ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
 
-export default function RecipeVisitsGraph() {
+export default function CuisineLikesGraph() {
   const [chartData, setChartData] = useState<{
     labels: string[];
-    datasets: { label: string; data: number[]; borderWidth: number; borderColor: string }[];
+    datasets: { label: string; data: number[]; backgroundColor: string }[];
   } | null>(null);
   const [loading, setLoading] = useState(true);
-  const [latestRecipes, setLatestRecipes] = useState<{ id: string; name: string }[]>([]); // Latest recipes
+  const [latestRecipes, setLatestRecipes] = useState<{ id: string; name: string }[]>([]);
 
+  // Fetch cuisine likes data
   useEffect(() => {
     const fetchData = async () => {
       try {
-        // Fetch statistics for recipe views
-        const res = await fetch("/api/recipe-views");
+        const res = await fetch("/api/recipes/recipe-like");
         if (!res.ok) {
-          throw new Error("Failed to fetch recipe views data");
+          throw new Error("Failed to fetch cuisine likes data");
         }
         const data = await res.json();
 
-        if (data.categories && data.categoryVisits) {
+        if (data.cuisineNames && data.cuisineLikes) {
           setChartData({
-            labels: data.categories,
+            labels: data.cuisineNames, // Use Cuisine Names
             datasets: [
               {
-                label: "Recipe Views",
-                data: data.categoryVisits,
-                borderWidth: 2,
-                borderColor: "#44fdee",
+                label: "Number of Likes",
+                data: data.cuisineLikes,
+                backgroundColor: "rgba(54, 162, 235, 0.6)",
               },
             ],
           });
@@ -55,6 +53,7 @@ export default function RecipeVisitsGraph() {
       }
     };
 
+    // Fetch latest recipes
     const fetchLatestRecipes = async () => {
       try {
         const res = await fetch("/api/recipes/latest");
@@ -72,12 +71,31 @@ export default function RecipeVisitsGraph() {
     fetchLatestRecipes();
   }, []);
 
+  // Chart options
   const chartOptions = {
+    responsive: true,
+    plugins: {
+      legend: {
+        display: true,
+      },
+    },
     scales: {
-      y: {
+      x: {
         grid: {
           display: false,
         },
+        ticks: {
+          autoSkip: false, // Display all Cuisine names
+          maxRotation: 90,
+          minRotation: 45,
+        },
+      },
+      y: {
+        grid: {
+          display: true,
+        },
+        beginAtZero: true,
+        max: 100,
       },
     },
   };
@@ -87,15 +105,10 @@ export default function RecipeVisitsGraph() {
   }
 
   return (
-    <div className="p-6 max-w-xl mx-auto font-sans">
-      {/* Header */}
+    <div className="p-6 max-w-4xl mx-auto">
+      {/* Header and Add Recipe Button */}
       <div className="flex justify-between items-center mb-4">
-        <h2 className="flex items-center text-2xl text-gray-800">
-          <span className="w-2.5 h-2.5 bg-yellow-400 rounded-full mr-2"></span>
-          Recipe Visits Graph
-        </h2>
-
-        {/* Add Recipe Button */}
+        <h2 className="text-2xl font-bold text-gray-800 mb-4">Recipe Likes by Cuisine</h2>
         <Link href="/AdminAddRecipe">
           <button className="bg-green-500 text-white px-4 py-2 rounded-md hover:bg-green-600">
             + Add Recipe
@@ -103,10 +116,10 @@ export default function RecipeVisitsGraph() {
         </Link>
       </div>
 
-      {/* Display the chart */}
-      {chartData && <Chart type="line" data={chartData} options={chartOptions} />}
+      {/* Chart */}
+      {chartData && <Chart type="bar" data={chartData} options={chartOptions} />}
 
-      {/* Display the latest recipes */}
+      {/* Display Latest Recipes */}
       <div className="mt-6">
         <h3 className="text-xl font-semibold mb-2 text-gray-700">Latest Recipes</h3>
         {latestRecipes.length === 0 ? (

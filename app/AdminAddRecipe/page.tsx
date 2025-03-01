@@ -44,6 +44,30 @@ function AdminAddRecipe() {
     setIngredients(ingredients.filter((_, i) => i !== index));
   };
 
+  // Function for uploading the image file
+  const uploadFile = async (file: File) => {
+    const formData = new FormData();
+    formData.append("image", file); // Send file in the form
+
+    try {
+      const response = await fetch("/api/upload", {
+        method: "POST",
+        body: formData,
+      });
+
+      if (!response.ok) {
+        throw new Error("การอัพโหลดไฟล์ล้มเหลว");
+      }
+
+      const data = await response.json();
+      console.log("ไฟล์อัพโหลดสำเร็จที่:", data.url); // URL ของไฟล์ที่อัพโหลด
+      return data.url; // Return uploaded image URL
+    } catch (error) {
+      console.error("เกิดข้อผิดพลาด:", error);
+      throw error; // Propagate error
+    }
+  };
+
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
     setError("");
@@ -54,19 +78,16 @@ function AdminAddRecipe() {
       return;
     }
 
-    // Prepare form data to include the image file
+    // Prepare form data
     const formData = new FormData();
     formData.append("name", name);
     formData.append("description", description);
     formData.append("ingredientDetails", ingredientDetails);
     formData.append("instructions", instructions);
-    if (image) {
-      formData.append("image", image); // Append the image file
-    }
     formData.append("cuisineId", cuisineId);
     formData.append("categoryId", categoryId);
 
-    // Check if ingredients array is valid before appending
+    // Add ingredients to form data
     if (ingredients.length > 0) {
       formData.append("ingredients", JSON.stringify(ingredients)); // Send ingredients array as JSON
     } else {
@@ -75,9 +96,17 @@ function AdminAddRecipe() {
     }
 
     try {
+      // If an image is selected, upload the file
+      let imageUrl = "";
+      if (image) {
+        imageUrl = await uploadFile(image);
+        formData.append("image", imageUrl); // Add uploaded image URL to form data
+      }
+
+      // Submit the recipe data
       const res = await fetch("/api/recipes", {
         method: "POST",
-        body: formData, // Send form data with image
+        body: formData,
       });
 
       if (!res.ok) {
@@ -117,6 +146,7 @@ function AdminAddRecipe() {
             onChange={(e) => setDescription(e.target.value)}
             className="w-full border p-2 rounded"
             placeholder="Short description of the recipe"
+            rows={5} // Increased row size to allow more visible content
           />
         </div>
 
@@ -128,6 +158,7 @@ function AdminAddRecipe() {
             onChange={(e) => setIngredientDetails(e.target.value)}
             className="w-full border p-2 rounded"
             placeholder="List of ingredients"
+            rows={5} // Increased row size to allow more visible content
           />
         </div>
 
@@ -139,6 +170,7 @@ function AdminAddRecipe() {
             onChange={(e) => setInstructions(e.target.value)}
             className="w-full border p-2 rounded"
             placeholder="Cooking instructions"
+            rows={5} // Increased row size to allow more visible content
           />
         </div>
 

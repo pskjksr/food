@@ -6,49 +6,57 @@ import Link from "next/link";
 
 const SearchResults: React.FC = () => {
   const searchParams = useSearchParams();  
-  const query = searchParams.get("ingredients"); 
+  const query = searchParams.get("ingredients"); // Get ingredients from the URL params
   const [recipes, setRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
   const API_URL = "http://localhost:3000";  
   const [likedRecipes, setLikedRecipes] = useState<number[]>([]);
 
-  // ฟังก์ชัน toggleLike
+  // Function to toggle the like status for a recipe
   const toggleLike = (id: number) => {
     setLikedRecipes((prev) =>
       prev.includes(id) ? prev.filter((item) => item !== id) : [...prev, id]
     );
   };
 
-  
   useEffect(() => {
     const fetchRecipes = async () => {
-      if (!query) return; 
-      setLoading(true); 
+      // If no ingredients are provided, do not make the API call
+      if (!query) return;
+
+      setLoading(true); // Set loading state to true
       try {
-        const queryParams = `ingredients=${encodeURIComponent(query)}`; 
+        const queryParams = `ingredients=${encodeURIComponent(query)}`; // Prepare query params
         const response = await fetch(`/api/recipes/by-ingredients?${queryParams}`);
         const data = await response.json();
-        setRecipes(data.recipes); 
+        
+        // Handle the case when no recipes are found
+        if (data.recipes) {
+          setRecipes(data.recipes); // Set recipes state with fetched data
+        } else {
+          setRecipes([]); // Set recipes state to an empty array if no results
+        }
       } catch (error) {
-        console.error("Error fetching recipes:", error); 
+        console.error("Error fetching recipes:", error); // Log any error
       } finally {
-        setLoading(false); 
+        setLoading(false); // Set loading state to false after fetching
       }
     };
+
     fetchRecipes();
-  }, [query]); 
+  }, [query]); // Run this effect when `query` changes
 
   return (
     <section className="p-10">
       <h2 className="text-2xl font-bold text-gray-800 mb-4">ผลการค้นหา</h2>
 
-      {/* แสดงข้อความขณะกำลังโหลด */}
+      {/* Show loading message while fetching */}
       {loading ? (
         <p>กำลังค้นหาสูตรอาหาร...</p>
       ) : (
         <>
-          {/* หากมีผลลัพธ์ */}
+          {/* If recipes are found, display them */}
           {recipes.length > 0 ? (
             <div className="grid grid-cols-[repeat(auto-fill,_minmax(200px,_1fr))] gap-4">
               {recipes.map((recipe, index) => (
@@ -58,7 +66,7 @@ const SearchResults: React.FC = () => {
                             transition-transform duration-300 ease-in-out flex flex-col 
                             hover:shadow-lg hover:-translate-y-1 relative"
                 >
-                  {/* รูปภาพเมนู */}
+                  {/* Recipe Image */}
                   <div className="flex justify-center p-3">
                     <img
                       src={recipe.image ? `${API_URL}/${recipe.image}` : "/fallback-image.jpg"}
@@ -68,7 +76,7 @@ const SearchResults: React.FC = () => {
                     />
                   </div>
 
-                  {/* ชื่อเมนู & ปุ่มดูสูตร */}
+                  {/* Recipe Name & View Button */}
                   <div className="relative p-4 flex-grow">
                     <h3 className="mb-3 font-semibold text-lg">{recipe.name}</h3>
                     <Link href={`/RecipeDescription/${encodeURIComponent(recipe.name)}`}>
@@ -78,7 +86,7 @@ const SearchResults: React.FC = () => {
                     </Link>
                   </div>
 
-                  {/* ปุ่มหัวใจ (Like) */}
+                  {/* Like Button */}
                   <i
                     className={`fa-solid fa-heart absolute top-2 right-2 border-2 text-xs border-[#FFECC1] 
                                 ${likedRecipes.includes(recipe.id) ? "text-red-500 bg-yellow-300" : "text-slate-100 bg-[#EFBD4C]"} 
@@ -90,7 +98,7 @@ const SearchResults: React.FC = () => {
               ))}
             </div>
           ) : (
-            <p>ไม่พบสูตรอาหารที่ตรงกับวัตถุดิบที่เลือก</p>
+            <p>ไม่พบสูตรอาหารที่ตรงกับวัตถุดิบที่เลือก</p> // No results found message
           )}
         </>
       )}
