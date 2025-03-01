@@ -3,12 +3,11 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../db/prisma"; // ตรวจสอบ path ของ prisma ให้ถูกต้อง
 
-export async function GET(request: NextRequest, context: { params: { name: string } }) {
-  // ใช้ await เพื่อดึงข้อมูลจาก params
-  const { name } = await context.params; // รอให้ params เสร็จสมบูรณ์
-  const recipeName = decodeURIComponent(name); // แปลงชื่อสูตรจาก URL
+// ฟังก์ชัน GET
+export async function GET(request: NextRequest, { params }: { params: { name: string } }) {
+  const { name } = params; // ดึงชื่อสูตรอาหารจาก params
+  const recipeName = decodeURIComponent(name); // ถอดรหัสชื่อสูตรจาก URL
 
-  
   try {
     // ค้นหาสูตรอาหารจากชื่อ
     const recipe = await prisma.recipe.findFirst({
@@ -38,6 +37,7 @@ export async function GET(request: NextRequest, context: { params: { name: strin
   }
 }
 
+// ฟังก์ชัน DELETE
 export async function DELETE(req: NextRequest, { params }: { params: { name: string } }) {
   const recipeName = decodeURIComponent(params.name); // ถอดรหัสชื่อจาก URL
 
