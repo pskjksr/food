@@ -3,10 +3,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../db/prisma"; // ตรวจสอบ path ของ prisma ให้ถูกต้อง
 
-// ฟังก์ชัน GET
 export async function GET(request: NextRequest, context: { params: { name: string } }) {
-  const { name } = context.params; // ดึงชื่อสูตรอาหารจาก params
-  const recipeName = decodeURIComponent(name); // ถอดรหัสชื่อสูตรจาก URL
+  const { name } = await context.params; // ใช้ await กับ params
+
+  const recipeName = decodeURIComponent(name); // แปลงชื่อสูตรจาก URL
 
   try {
     // ค้นหาสูตรอาหารจากชื่อ
@@ -34,33 +34,5 @@ export async function GET(request: NextRequest, context: { params: { name: strin
       { error: "An error occurred", details: error instanceof Error ? error.message : 'Unknown error' },
       { status: 500 }
     );
-  }
-}
-
-// ฟังก์ชัน DELETE
-export async function DELETE(req: NextRequest, context: { params: { name: string } }) {
-  const { name } = context.params; // ดึงชื่อสูตรอาหารจาก params
-  const recipeName = decodeURIComponent(name); // ถอดรหัสชื่อสูตรจาก URL
-
-  try {
-    // ค้นหาสูตรอาหารจากชื่อ
-    const existingRecipe = await prisma.recipe.findFirst({
-      where: { name: recipeName },
-    });
-
-    // ถ้าไม่มีสูตรนี้อยู่
-    if (!existingRecipe) {
-      return NextResponse.json({ error: "Recipe not found" }, { status: 404 });
-    }
-
-    // ลบสูตรอาหาร
-    await prisma.recipe.delete({
-      where: { id: existingRecipe.id }, // ใช้ ID ที่ได้จากการค้นหาชื่อ
-    });
-
-    return NextResponse.json({ message: "Recipe deleted successfully" });
-  } catch (error) {
-    console.error("Error deleting recipe:", error);
-    return NextResponse.json({ error: "Failed to delete recipe" }, { status: 500 });
   }
 }
