@@ -59,7 +59,7 @@ export default function Page() {
       </div>
       <div className="px-5">
         
-        < Dinner recipes={recipes} />
+        < Dinner  />
       </div>
     </section>
   );
