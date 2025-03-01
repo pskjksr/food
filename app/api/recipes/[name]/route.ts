@@ -4,8 +4,8 @@ import { NextRequest, NextResponse } from "next/server";
 import prisma from "../../db/prisma"; // ตรวจสอบ path ของ prisma ให้ถูกต้อง
 
 // ฟังก์ชัน GET
-export async function GET(request: NextRequest, { params }: { params: { name: string } }) {
-  const { name } = params; // ดึงชื่อสูตรอาหารจาก params
+export async function GET(request: NextRequest, context: { params: { name: string } }) {
+  const { name } = context.params; // ดึงชื่อสูตรอาหารจาก params
   const recipeName = decodeURIComponent(name); // ถอดรหัสชื่อสูตรจาก URL
 
   try {
@@ -38,8 +38,9 @@ export async function GET(request: NextRequest, { params }: { params: { name: st
 }
 
 // ฟังก์ชัน DELETE
-export async function DELETE(req: NextRequest, { params }: { params: { name: string } }) {
-  const recipeName = decodeURIComponent(params.name); // ถอดรหัสชื่อจาก URL
+export async function DELETE(req: NextRequest, context: { params: { name: string } }) {
+  const { name } = context.params; // ดึงชื่อสูตรอาหารจาก params
+  const recipeName = decodeURIComponent(name); // ถอดรหัสชื่อสูตรจาก URL
 
   try {
     // ค้นหาสูตรอาหารจากชื่อ
