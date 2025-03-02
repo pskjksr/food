@@ -17,13 +17,13 @@ export default function CleanEatingRecipes() {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
   const [likedRecipes, setLikedRecipes] = useState<number[]>([]); // To store liked recipes
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000";
+  
 
   // Fetch recipes
   useEffect(() => {
     async function fetchRecipes() {
       try {
-        const response = await fetch(`${API_URL}/api/recipes?cuisineId=12`);
+        const response = await fetch(`/api/recipes?cuisineId=12`);
         if (!response.ok) throw new Error("Failed to fetch data");
 
         const result: Recipe[] = await response.json();
@@ -40,7 +40,7 @@ export default function CleanEatingRecipes() {
     }
 
     fetchRecipes();
-  }, [API_URL]);
+  }, );
 
   // Fetch liked recipes
   useEffect(() => {
@@ -51,7 +51,7 @@ export default function CleanEatingRecipes() {
       }
 
       try {
-        const response = await fetch(`${API_URL}/api/likes`, {
+        const response = await fetch(`/api/likes`, {
           method: "GET",
           headers: {
             
@@ -71,7 +71,7 @@ export default function CleanEatingRecipes() {
     }
 
     fetchLikedRecipes();
-  }, [API_URL, session]);
+  }, [session]);
 
   const toggleLike = async (recipeId: number) => {
     if (!session) {
@@ -82,7 +82,7 @@ export default function CleanEatingRecipes() {
     // ถ้าผู้ใช้ได้ไลค์แล้ว เราจะลบออก
     const method = likedRecipes.includes(recipeId) ? 'DELETE' : 'POST';
     
-    const response = await fetch(`${API_URL}/api/likes`, {
+    const response = await fetch(`/api/likes`, {
       method: method,
       headers: {
         'Content-Type': 'application/json',
@@ -116,7 +116,7 @@ export default function CleanEatingRecipes() {
           >
             <div className="flex justify-center p-3">
               <img
-                src={item.image ? `${API_URL}/${item.image}` : "/fallback-image.jpg"}
+                src={item.image ? `/${item.image}` : "/fallback-image.jpg"}
                 alt={item.name || "Recipe Image"}
                 className="w-40 h-40 object-cover rounded-md"
                 onError={(e) => (e.currentTarget.src = "/fallback-image.jpg")}
