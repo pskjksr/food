@@ -1,5 +1,8 @@
 import { NextRequest, NextResponse } from "next/server";
+
 import prisma from "@/utils/prismaClient";  // เปลี่ยน path ตามโครงสร้างโปรเจค
+  // เปลี่ยน path ตามโครงสร้างโปรเจค
+
 import { sendResetEmail } from "../../db/sendResetEmail";  // ต้องมีฟังก์ชันส่งอีเมล
 import crypto from "crypto";
 

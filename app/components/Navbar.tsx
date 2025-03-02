@@ -127,7 +127,7 @@ function Navbar() {
                   <Link href="/login" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     Login
                   </Link>
-                  <Link href="/register" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
+                  <Link href="/signup" className="block px-4 py-2 text-gray-700 hover:bg-gray-100">
                     Register
                   </Link>
                 </>
