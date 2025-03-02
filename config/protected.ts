@@ -24,7 +24,9 @@ const list_api_protect : IApiProtect[] = [
         method: 'get',
         pathname: '/api/recipes/latest',
         premission: 'admin'
-    }
+    },
+   
+    
 ]
 
 export default list_api_protect;

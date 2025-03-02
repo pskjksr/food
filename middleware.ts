@@ -20,7 +20,7 @@ export default async function middleware(request: NextRequest) {
             const element = list_protect[i];
             
             //check method premission
-            if(element.pathname == pathname){
+            if(element.pathname == pathname && request.method.toLocaleLowerCase() == element.method.toLocaleLowerCase()){
                 return NextResponse.json({success: false, message: 'not login to connect api'}, {status: 400})
             }
         }
