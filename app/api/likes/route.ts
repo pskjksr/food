@@ -1,5 +1,5 @@
 import { NextResponse } from 'next/server';
-import prisma from '../db/prisma'; // เชื่อมต่อกับ Prisma
+import prisma from "@/utils/prismaClient";
 import { auth } from '@/config/auth'; // เชื่อมต่อกับระบบ Authentication
 
 // ฟังก์ชัน GET - ดึงข้อมูล Likes ทั้งหมด
@@ -10,18 +10,17 @@ export async function GET() {
         recipe: {
           select: {
             id: true,
-            name: true,   // ✅ ดึงเฉพาะชื่อเมนู
-            image: true,  // ✅ ดึงเฉพาะรูปภาพเมนู
+            name: true,
+            image: true,
           },
         },
       },
     });
 
-    // ✅ จัดโครงสร้างข้อมูลก่อนส่งกลับไปที่ frontend
     const formattedLikes = likes.map((like) => ({
       id: like.id,
       recipeId: like.recipe.id,
-      name: like.recipe.name || "Unknown Recipe",  // ✅ ป้องกันกรณี `null`
+      name: like.recipe.name || "Unknown Recipe",
       recipeImage: like.recipe.image || "/fallback-image.jpg",
     }));
 
@@ -31,6 +30,7 @@ export async function GET() {
     return NextResponse.json({ error: "Failed to fetch likes" }, { status: 500 });
   }
 }
+
 
 // ฟังก์ชัน POST - เพิ่ม Like สำหรับผู้ใช้
 export async function POST(req: Request) {

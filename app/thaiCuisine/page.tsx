@@ -58,7 +58,7 @@ export default function Page() {
         </h2>
       </div>
       <div className="px-5">
-        <ThaiRecipes recipes={recipes} /> 
+        <ThaiRecipes /> 
       </div>
     </section>
   );

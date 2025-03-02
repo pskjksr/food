@@ -1,26 +1,26 @@
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../db/prisma"; // ตรวจสอบ path ของ prisma ให้ถูกต้อง
+import prisma from "@/utils/prismaClient";
 
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
-  const { id } = await context.params; // await เพื่อให้สามารถใช้ `id` ได้
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
+  const params = await context.params;  // ใช้ await กับ params เพื่อให้ได้ค่าจริง
+  const { id } = params;
 
-  if (!id) {
-    return NextResponse.json({ error: "User ID is missing" }, { status: 400 });
+  if (!id || isNaN(Number(id))) {
+    return NextResponse.json({ error: "Invalid or missing User ID" }, { status: 400 });
   }
 
-  const userId = Number(id); // แปลง id เป็นตัวเลข
+  const userId = Number(id);
 
   try {
-    // ค้นหาผู้ใช้จาก id
     const user = await prisma.user.findUnique({
-      where: { id: userId }, // ค้นหาผู้ใช้จาก id
+      where: { id: userId },
     });
 
     if (!user) {
       return NextResponse.json({ error: "User not found" }, { status: 404 });
     }
 
-    return NextResponse.json(user);
+    return NextResponse.json(user, { status: 200 });
   } catch (error) {
     console.error("Error fetching user:", error);
     return NextResponse.json({ error: "Server error" }, { status: 500 });

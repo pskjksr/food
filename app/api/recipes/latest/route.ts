@@ -15,7 +15,12 @@ export async function GET(req: NextRequest) {
 
     return NextResponse.json(latestRecipes);
   } catch (error) {
-    console.error("Error fetching latest recipes:", error);
-    return NextResponse.json({ error: "Failed to fetch recipes" }, { status: 500 });
+    if (error instanceof Error) {
+      console.error("Error fetching latest recipes:", error.message);
+      return NextResponse.json({ error: "An error occurred while fetching the latest recipes.", details: error.message }, { status: 500 });
+    }
+    // Handle case where error is not an instance of Error (unexpected error type)
+    console.error("Unexpected error:", error);
+    return NextResponse.json({ error: "An unexpected error occurred." }, { status: 500 });
   }
 }

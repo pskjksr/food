@@ -23,7 +23,7 @@ export async function sendResetEmail(email: string, token: string) {
              <a href="${resetLink}">${resetLink}</a>`,
     });
     console.log("✅ Reset email sent to:", email);
-  } catch (error) {
+  } catch (error: any) { // ใช้ `any` หรือ `Error` เพื่อให้เข้าถึง `message` ได้
     console.error("❌ Failed to send reset email:", error.message);  // แสดงข้อความข้อผิดพลาด
     if (error.response) {
       console.error("❌ Error response:", error.response);  // แสดงรายละเอียดการตอบกลับจาก SMTP

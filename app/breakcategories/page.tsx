@@ -59,7 +59,7 @@ export default function Page() {
       </div>
       <div className="px-5">
         {/* Render the JapaneseRecipes component */}
-        < Breakfast  recipes={recipes} />
+        < Breakfast />
       </div>
     </section>
   );

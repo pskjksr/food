@@ -1,10 +1,14 @@
-// app/api/recipes/[name]/route.ts
-
 import { NextRequest, NextResponse } from "next/server";
-import prisma from "../../db/prisma"; // ตรวจสอบ path ของ prisma ให้ถูกต้อง
+import prisma from "@/utils/prismaClient"; // ตรวจสอบ path ของ prisma ให้ถูกต้อง
 
-export async function GET(request: NextRequest, context: { params: { name: string } }) {
-  const { name } = await context.params; // ใช้ await กับ params
+// การสร้าง API Route สำหรับค้นหาสูตรอาหารตามชื่อ
+export async function GET(request: NextRequest,{params} :{params: Promise <{name : string}>} ) {
+  const { name } = await params ; // ใช้ `params` เพื่อดึง `name` จาก URL
+
+  // ตรวจสอบว่า `name` ถูกส่งมาหรือไม่
+  if (!name) {
+    return NextResponse.json({ message: "No recipe name provided" }, { status: 400 });
+  }
 
   const recipeName = decodeURIComponent(name); // แปลงชื่อสูตรจาก URL
 

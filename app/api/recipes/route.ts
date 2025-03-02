@@ -61,9 +61,9 @@ export async function POST(req: NextRequest) {
 
     // ดึงข้อมูลจาก formData
     const name = body.get("name")?.toString();
-    const description = body.get("description")?.toString();
-    const ingredientDetails = body.get("ingredientDetails")?.toString();
-    const instructions = body.get("instructions")?.toString();
+    const description = body.get("description")?.toString() || "";  // ให้เป็น string ว่างถ้าไม่มี
+    const ingredientDetails = body.get("ingredientDetails")?.toString() || "";  // ให้เป็น string ว่างถ้าไม่มี
+    const instructions = body.get("instructions")?.toString() || "";  // ให้เป็น string ว่างถ้าไม่มี
     const image = body.get("image");
     const cuisineId = body.get("cuisineId")?.toString();
     const categoryId = body.get("categoryId")?.toString();
@@ -83,9 +83,9 @@ export async function POST(req: NextRequest) {
     const newRecipe = await prisma.recipe.create({
       data: {
         name,
-        description,
-        ingredientDetails,
-        instructions,
+        description, // ตอนนี้ description จะเป็น string แน่นอน
+        ingredientDetails, // ทำให้แน่ใจว่าเป็น string
+        instructions, // ทำให้แน่ใจว่าเป็น string
         image: image ? image.toString() : null, // Handle image if exists
         cuisineId: Number(cuisineId),
         categoryId: Number(categoryId),

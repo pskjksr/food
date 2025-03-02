@@ -60,7 +60,7 @@ export default function Page() {
         </h2>
       </div>
       <div className="px-5">
-        <WesternRecipes recipes={recipes} />
+        <WesternRecipes  />
       </div>
     </section>
   );

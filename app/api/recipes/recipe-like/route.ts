@@ -1,5 +1,10 @@
 import { NextResponse } from "next/server";
-import prisma from "../../db/prisma"; // เชื่อมต่อ Prisma
+import prisma from "@/utils/prismaClient";  // เชื่อมต่อ Prisma
+
+// Type guard for error
+function isError(error: unknown): error is Error {
+  return error instanceof Error;
+}
 
 export async function GET() {
   try {
@@ -42,7 +47,12 @@ export async function GET() {
       cuisineLikes, // จำนวนไลก์
     });
   } catch (error) {
-    console.error("Error fetching cuisine like stats:", error);
-    return NextResponse.json({ error: "Failed to fetch data" }, { status: 500 });
+    // Enhanced error handling
+    if (isError(error)) {
+      console.error("Error fetching cuisine like stats:", error.message);
+      return NextResponse.json({ error: "Failed to fetch data", details: error.message }, { status: 500 });
+    }
+    console.error("Unexpected error:", error);
+    return NextResponse.json({ error: "An unexpected error occurred." }, { status: 500 });
   }
 }
