@@ -8,11 +8,13 @@ import {
   CategoryScale,
   LinearScale,
   BarElement,
+  BarController, // เพิ่มการลงทะเบียน BarController
   Tooltip,
   Legend,
 } from "chart.js";
 
-ChartJS.register(CategoryScale, LinearScale, BarElement, Tooltip, Legend);
+// ลงทะเบียนทุก Controller ที่จำเป็น
+ChartJS.register(CategoryScale, LinearScale, BarElement, BarController, Tooltip, Legend);
 
 export default function CuisineLikesGraph() {
   const [chartData, setChartData] = useState<{
@@ -34,12 +36,12 @@ export default function CuisineLikesGraph() {
 
         if (data.cuisineNames && data.cuisineLikes) {
           setChartData({
-            labels: data.cuisineNames, // Use Cuisine Names
+            labels: data.cuisineNames, // ใช้ Cuisine Names
             datasets: [
               {
                 label: "Number of Likes",
                 data: data.cuisineLikes,
-                backgroundColor: "rgba(54, 162, 235, 0.6)",
+                backgroundColor: "rgba(54, 162, 235, 0.6)", // สีของแถบ
               },
             ],
           });
@@ -61,7 +63,7 @@ export default function CuisineLikesGraph() {
           throw new Error("Failed to fetch latest recipes");
         }
         const data = await res.json();
-        setLatestRecipes(data); // Store latest recipes
+        setLatestRecipes(data); // เก็บ latest recipes
       } catch (error) {
         console.error("Error fetching latest recipes:", error);
       }
@@ -85,7 +87,7 @@ export default function CuisineLikesGraph() {
           display: false,
         },
         ticks: {
-          autoSkip: false, // Display all Cuisine names
+          autoSkip: false, // แสดงชื่อ Cuisine ทุกอัน
           maxRotation: 90,
           minRotation: 45,
         },

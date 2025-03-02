@@ -36,13 +36,13 @@ export async function GET() {
 export async function POST(req: Request) {
   try {
     const session = await auth(); // ตรวจสอบ session ของผู้ใช้
-    if (!session?.user.id) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { recipeId } = await req.json();
-    const userId = parseInt(session.user.id, 10);
-    const parsedRecipeId = parseInt(recipeId, 10);
+    const userId = Number(session.user.id);  // ปรับเป็น Number เพื่อให้มั่นใจว่าเป็นตัวเลข
+    const parsedRecipeId = Number(recipeId);  // ปรับเป็น Number
 
     if (isNaN(userId) || isNaN(parsedRecipeId)) {
       return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
@@ -79,13 +79,13 @@ export async function POST(req: Request) {
 export async function DELETE(req: Request) {
   try {
     const session = await auth(); // ตรวจสอบ session ของผู้ใช้
-    if (!session?.user.id) {
+    if (!session?.user?.id) {
       return NextResponse.json({ message: "Unauthorized" }, { status: 401 });
     }
 
     const { recipeId } = await req.json();
-    const userId = parseInt(session.user.id, 10);
-    const parsedRecipeId = parseInt(recipeId, 10);
+    const userId = Number(session.user.id);  // ปรับเป็น Number
+    const parsedRecipeId = Number(recipeId);  // ปรับเป็น Number
 
     if (isNaN(userId) || isNaN(parsedRecipeId)) {
       return NextResponse.json({ message: "Invalid ID" }, { status: 400 });
