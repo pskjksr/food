@@ -111,7 +111,7 @@ const LikePage = () => {
               {/* Recipe Image */}
               <div className="flex justify-center p-3">
                 <img
-                  src={item.recipeImage ? `${API_URL}/${item.recipeImage}` : "/fallback-image.jpg"}
+                  src={item.recipeImage ? `/${item.recipeImage}` : "/fallback-image.jpg"}
                   alt={item.name || "Recipe Image"}
                   className="w-40 h-40 object-cover rounded-md"
                   onError={(e) => (e.currentTarget.src = "/fallback-image.jpg")}

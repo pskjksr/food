@@ -19,7 +19,7 @@ export default function Page() {
   useEffect(() => {
     const fetchRecipes = async () => {
       try {
-        const response = await fetch("http://localhost:3000/api/recipes");
+        const response = await fetch("/api/recipes");
         if (!response.ok) {
           throw new Error(`Failed to fetch recipes. Status: ${response.status}`);
         }

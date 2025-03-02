@@ -10,7 +10,6 @@ const SearchResults: React.FC = () => {
   const [recipes, setRecipes] = useState<any[]>([]);
   const [loading, setLoading] = useState<boolean>(false);
 
-  const API_URL = "http://localhost:3000";  
   const [likedRecipes, setLikedRecipes] = useState<number[]>([]);
 
   // Function to toggle the like status for a recipe
@@ -69,7 +68,7 @@ const SearchResults: React.FC = () => {
                   {/* Recipe Image */}
                   <div className="flex justify-center p-3">
                     <img
-                      src={recipe.image ? `${API_URL}/${recipe.image}` : "/fallback-image.jpg"}
+                      src={recipe.image ? `/${recipe.image}` : "/fallback-image.jpg"}
                       alt={recipe.name || "Recipe Image"}
                       className="w-40 h-40 object-cover rounded-md"
                       onError={(e) => (e.currentTarget.src = "/fallback-image.jpg")}

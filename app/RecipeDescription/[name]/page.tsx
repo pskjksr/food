@@ -19,7 +19,7 @@ const RecipeDescription = () => {
   const [loading, setLoading] = useState<boolean>(true);
   const [error, setError] = useState<string | null>(null);
 
-  const API_URL = process.env.NEXT_PUBLIC_API_URL || "http://localhost:3000"; // Ensure API URL is correct
+  // Ensure API URL is correct
 
   useEffect(() => {
     if (!name) {
@@ -33,7 +33,7 @@ const RecipeDescription = () => {
     async function fetchRecipe() {
       try {
         setLoading(true);
-        const response = await fetch(`${API_URL}/api/recipes/${name}`);
+        const response = await fetch(`/api/recipes/${name}`);
         if (!response.ok) throw new Error("Recipe not found");
 
         const data: Recipe = await response.json();
@@ -46,7 +46,7 @@ const RecipeDescription = () => {
     }
 
     fetchRecipe();
-  }, [API_URL, name]);
+  }, [name]);
 
   if (loading) return <div className="flex justify-center items-center"><span>Loading...</span></div>;
   if (error) return <div className="text-red-500">Error: {error}</div>;
@@ -85,7 +85,7 @@ const RecipeDescription = () => {
         <div className="w-1/3 flex justify-center items-center">
           <div className="bg-yellow-400 p-4 rounded-full">
             <img
-              src={recipe.image ? `${API_URL}/${recipe.image}` : "/fallback-image.jpg"}
+              src={recipe.image ? `/${recipe.image}` : "/fallback-image.jpg"}
               alt={recipe.name || "Recipe Image"}
               className="w-80 h-80 object-cover rounded-full"
               onError={(e) => (e.currentTarget.src = "/fallback-image.jpg")}
