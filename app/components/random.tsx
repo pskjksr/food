@@ -49,7 +49,7 @@ const RandomRecipe = () => {
       <div className="max-w-md text-center md:text-left ">
   <h1 className="text-2xl font-bold text-gray-800 ">{recipe.name}</h1>
   <p className="text-gray-600 mb-6">{recipe.description}</p>
-  <Link href={`/RecipeDescription/${recipe.id}`}>
+  <Link href={`/RecipeDescription/${recipe.name}`}>
     <button className="border-2 bg-yellow-400 border-[#FFECC1] text-white hover:text-[#FFB100] hover:bg-[#FFECC1] hover:border-[#EFBD4C] active:bg-[#F8F8F8] py-2 px-6 rounded-3xl shadow">
       RECIPE
     </button>
