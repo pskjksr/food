@@ -13,6 +13,7 @@ function SignupPage() {
   const [showPassword, setShowPassword] = useState(false);
   const router = useRouter();
 
+  // ฟังก์ชันตรวจสอบข้อมูลในฟอร์ม
   const validateForm = () => {
     if (!name || !email || !password) {
       setFormStatus({ message: "Please complete all inputs!", type: "error" });
@@ -29,12 +30,11 @@ function SignupPage() {
     return true;
   };
 
+  // ฟังก์ชัน handleSubmit สำหรับส่งข้อมูลไปยัง API
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    
+
     if (!validateForm()) return;
-    
-    console.log("Sending data:", { name, email, password });
 
     try {
       const res = await fetch("/api/auth/signup", {
@@ -45,23 +45,16 @@ function SignupPage() {
         body: JSON.stringify({ name, email, password }),
       });
 
-      const text = await res.text();
-      console.log("Response text:", text);
+      const data = await res.json();
 
-      try {
-        const data = JSON.parse(text);
-        if (!res.ok) {
-          setFormStatus({ message: data.error || "Signup failed. Please try again.", type: "error" });
-        } else {
-          setFormStatus({ message: "User signed up successfully! Please log in.", type: "success" });
-          setName("");
-          setEmail("");
-          setPassword("");
-          router.push("/login");
-        }
-      } catch (jsonError) {
-        console.error("Invalid JSON response:", text);
-        setFormStatus({ message: "Server error: Invalid response", type: "error" });
+      if (!res.ok) {
+        setFormStatus({ message: data.error || "Signup failed. Please try again.", type: "error" });
+      } else {
+        setFormStatus({ message: "User signed up successfully! Please log in.", type: "success" });
+        setName("");
+        setEmail("");
+        setPassword("");
+        router.push("/login");
       }
     } catch (error) {
       console.error("Fetch error:", error);

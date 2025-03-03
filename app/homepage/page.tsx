@@ -114,28 +114,33 @@ const Page: React.FC = () => {
 
       {/* Popup ให้เลือกวัตถุดิบ */}
       {showPopup && (
-        <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
-          <div className="bg-white p-6 rounded-lg w-4/5 max-w-xl">
-            <h2 className="text-xl font-bold text-gray-800 mb-4">เลือกวัตถุดิบ</h2>
-            <div className="grid grid-cols-4 gap-4">
-              {ingredients.map((ingredient, index) => (
-                <div
-                  key={index}
-                  className={`p-2 rounded-md cursor-pointer ${selectedIngredients.includes(ingredient) ? "bg-yellow-400 text-white" : "bg-gray-100"}`}
-                  onClick={() => toggleIngredient(ingredient)}
-                >
-                  {ingredient}
-                </div>
-              ))}
-            </div>
+  <div className="fixed inset-0 flex items-center justify-center bg-black bg-opacity-50">
+    <div className="bg-white p-6 rounded-lg w-4/5 max-w-xl flex flex-col">
+      <h2 className="text-xl font-bold text-gray-800 mb-4">เลือกวัตถุดิบ</h2>
 
-            <div className="mt-4 text-right">
-              <button onClick={searchRecipes} className="bg-green-500 text-white py-2 px-4 rounded shadow">ค้นหาสูตรอาหาร</button>
-              <button onClick={() => setShowPopup(false)} className="bg-gray-400 text-white py-2 px-4 rounded shadow ml-2">ปิด</button>
-            </div>
+      {/* กล่องเลือกวัตถุดิบที่มี scroll */}
+      <div className="grid grid-cols-4 gap-4 max-h-96 overflow-y-auto">
+        {ingredients.map((ingredient, index) => (
+          <div
+            key={index}
+            className={`p-2 rounded-md cursor-pointer ${
+              selectedIngredients.includes(ingredient) ? "bg-yellow-400 text-white" : "bg-gray-100"
+            }`}
+            onClick={() => toggleIngredient(ingredient)}
+          >
+            {ingredient}
           </div>
-        </div>
-      )}
+        ))}
+      </div>
+
+      {/* ปุ่มกดค้นหาและปิด */}
+      <div className="mt-4 text-right">
+        <button onClick={searchRecipes} className="bg-green-500 text-white py-2 px-4 rounded shadow">ค้นหาสูตรอาหาร</button>
+        <button onClick={() => setShowPopup(false)} className="bg-gray-400 text-white py-2 px-4 rounded shadow ml-2">ปิด</button>
+      </div>
+    </div>
+  </div>
+)}
     </>
   );
 };

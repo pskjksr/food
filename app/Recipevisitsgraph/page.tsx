@@ -129,8 +129,8 @@ export default function CuisineLikesGraph() {
         ) : (
           <ul className="space-y-2">
             {latestRecipes.map((recipe) => (
-              <li key={recipe.id} className="bg-gray-100 p-2 rounded-md">
-                <Link href={`/recipe/${recipe.id}`} className="text-blue-500 hover:underline">
+              <li key={recipe.name} className="bg-gray-100 p-2 rounded-md">
+                <Link href={`/RecipeDescription/${encodeURIComponent(recipe.name)}`} className="text-blue-500 hover:underline">
                   {recipe.name}
                 </Link>
               </li>
